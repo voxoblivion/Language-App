@@ -4,26 +4,22 @@ import time
 from libary import record_audio_and_play
 import tkinter as tk
 import playsound
-import pyaudio
-import wave
 
 
-# TODO introduce exit messages
 # TODO change menu messages to native language
 # TODO randomize order of data
-# TODO language selector
 
 class SampleApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self._frame = None
         self.switch_frame(StartPage)
-        self.words = json.load(open('Italian Dict'))
         self.index = 1
-        self.image = tk.PhotoImage(file=self.words[str(self.index)][3])
         self.score = 0
         self.correct = 0
         self.user_ans = ""
+        self.language = tk.StringVar()
+        self.words = {}
 
     def switch_frame(self, frame_class, index=1):
         """Destroys current frame and replaces it with a new one."""
@@ -36,21 +32,21 @@ class SampleApp(tk.Tk):
 
     def next_slide(self, eng_text=None, foreign_text=None, image=None, slider=None, unec_frame=None, activity=None):
         if self.index == len(self.words):
+            for widget in self._frame.winfo_children():
+                widget.destroy()
+            temp_frame = self._frame
             if activity == "Activity3":
-                for widget in self._frame.winfo_children():
-                    widget.destroy()
-                temp_frame = self._frame
                 score = tk.Label(temp_frame, text="Your score is: " + str(self.score))
-                button = tk.Button(temp_frame, text="Return to start page", command=lambda: self.switch_frame(StartPage))
+                button = tk.Button(temp_frame, text="Return to start page", command=lambda: self.switch_frame(MainPage))
                 score.grid()
                 button.grid()
             else:
-                self.switch_frame(StartPage)
-
+                label = tk.Label(temp_frame, text="Thank you for completing activity\n "
+                                                  "please press the continue button to return to the main menu")
+                button = tk.Button(temp_frame, text="Continue", command=lambda: self.switch_frame(MainPage))
+                label.grid()
+                button.grid()
         else:
-            if self.index == len(self.words) - 1:
-                if slider is not None:
-                    slider.configure(text="Return to home page")
             self.index += 1
             if eng_text is not None:
                 eng_text.configure(text=self.words[str(self.index)][1])
@@ -74,8 +70,8 @@ class SampleApp(tk.Tk):
                 label.config(text="Please enter the word in English associated with this image")
             return True
 
-
-# TODO fix logic error
+    # def generate_dict(self):
+    # TODO fix logic error
     # noinspection PyTypeChecker
     def calc_score(self, start_time, correct_ans=None):  # The lower the score the better
         multiplier = 1000
@@ -91,7 +87,6 @@ class SampleApp(tk.Tk):
             self.score += round(score)
             incorrect = len(self.words) - self.correct
             self.score += incorrect * 1000
-        print(self.score)
 
     def set_ans(self, ans, start_time, eng_text=None):
         self.user_ans = ans
@@ -102,11 +97,30 @@ class SampleApp(tk.Tk):
         self.calc_score(start_time, correct_ans)
         self.next_slide(eng_text=eng_text, activity="Activity3")
 
+    def generate_dict(self, language):
+        self.words = json.load(open(str(language.get()) + ' Dict'))
+        self.switch_frame(MainPage)
 
-# TODO 1st image disappears after using speaker widget only tested mic no impact, only occurs on first run of Activity1
+
 class StartPage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
+        label = tk.Label(self, text="Please select your native language")
+        self.language = tk.StringVar(self)
+        self.language.set("Italian")
+        menu = tk.OptionMenu(self, self.language, "Italian", "Polish", command=lambda x: master.generate_dict(
+            self.language))
+        menu.place(x=10, y=10)
+        label.grid()
+        menu.grid()
+
+# TODO 1st image disappears after using speaker widget only tested mic no impact, only occurs on first run of Activity1
+
+
+class MainPage(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+        master.image = tk.PhotoImage(file=master.words[str(master.index)][3])
         master.score = 0
         master.correct = 0
         start_label = tk.Label(self, text="This is the start page")
@@ -116,10 +130,13 @@ class StartPage(tk.Frame):
                                   command=lambda: master.switch_frame(Activity2))
         page_3_button = tk.Button(self, text="Open activity three",
                                   command=lambda: master.switch_frame(Activity3))
+        page_4_button = tk.Button(self, text="Reselect native language",
+                                  command=lambda: master.switch_frame(StartPage))
         start_label.grid()
         page_1_button.grid()
         page_2_button.grid(pady=2)
         page_3_button.grid(pady=1)
+        page_4_button.grid(pady=1)
 
 
 class Activity1(tk.Frame):
@@ -140,7 +157,7 @@ class Activity1(tk.Frame):
         ac1_start_button = tk.Button(self, text="Next Slide",
                                      command=lambda: master.next_slide(ac1_eng_word, ac1_native_word, ac1_image,
                                                                        ac1_start_button))
-        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(StartPage))
+        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         ac1_native_word.grid(row=0, column=2)
         ac1_eng_word.grid(row=1, column=2)
         ac1_mic.grid(row=2, column=1, padx=10)
@@ -151,7 +168,6 @@ class Activity1(tk.Frame):
 
 
 # TODO clear entry after each entry
-# TODO fix error message once index reaches end
 class Activity2(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
@@ -167,7 +183,7 @@ class Activity2(tk.Frame):
         ac2_entry_1 = tk.Entry(self, textvariable=ac2_user)
         ac2_entry_1.bind("<Return>",
                          lambda x: master.check_entry(ac2_user.get(), ac2_intro, ac2_native_word, ac2_label_2))
-        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(StartPage))
+        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         ac2_intro.grid(row=0)
         ac2_speaker.grid(row=7)
         ac2_native_word.grid(row=1)
@@ -176,7 +192,6 @@ class Activity2(tk.Frame):
         return_button.grid(row=13)
 
 
-# TODO add a end final score frame
 class Activity3(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
@@ -207,7 +222,7 @@ class Activity3(tk.Frame):
                                         " you complete the game the better score you will achieve, the lower the better")
         ac3_start_button = tk.Button(self, text="Start Game",
                                      command=lambda: master.next_slide(eng_text=ac3_label, unec_frame=ac3_start_button))
-        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(StartPage))
+        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         ac3_label.grid(row=3, columnspan=6, column=0, rowspan=2)
         ac3_start_button.grid(row=5, columnspan=6, column=0)
         return_button.grid(row=6, columnspan=6, column=0)
