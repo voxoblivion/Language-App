@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1fbf943a-6438-4651-943f-dd2bb57b65e4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Polish Dict" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Langauge-App" beforeDir="false" afterPath="$PROJECT_DIR$/Langauge-App" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Testing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -100,13 +97,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="9" />
-          <entry key="py" value="2314" />
+          <entry key="py" value="2362" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="9" />
-          <entry key="Python" value="2314" />
+          <entry key="Python" value="2362" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -139,13 +136,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Testing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3411">
-              <caret line="17" column="22" lean-forward="true" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
+            <state relative-caret-position="87">
+              <caret line="62" selection-start-line="62" selection-end-line="62" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <marker date="1536229343682" expanded="true" signature="2913:2914" ph="..." />
-                <marker date="1536229343682" expanded="true" signature="2913:2918" ph="..." />
-                <marker date="1536229343682" expanded="true" signature="4277:4716" ph="..." />
+                <marker date="1536229948721" expanded="true" signature="2910:2911" ph="..." />
+                <marker date="1536229948721" expanded="true" signature="2910:2915" ph="..." />
+                <marker date="1536229948721" expanded="true" signature="4274:4713" ph="..." />
               </folding>
             </state>
           </provider>
@@ -504,8 +501,8 @@
       <window_info id="Favorites" order="2" sideWeight="0.502008" side_tool="true" weight="0.18757921" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32740214" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49682036" visible="true" weight="0.24377224" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.30427048" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49682036" weight="0.24377224" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.30427048" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.49809885" weight="0.32740214" />
@@ -581,6 +578,11 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Copy and Paste Code.py</url>
           <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Testing.py</url>
+          <line>62</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -773,13 +775,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Testing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3411">
-          <caret line="17" column="22" lean-forward="true" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
+        <state relative-caret-position="87">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <marker date="1536229343682" expanded="true" signature="2913:2914" ph="..." />
-            <marker date="1536229343682" expanded="true" signature="2913:2918" ph="..." />
-            <marker date="1536229343682" expanded="true" signature="4277:4716" ph="..." />
+            <marker date="1536229948721" expanded="true" signature="2910:2911" ph="..." />
+            <marker date="1536229948721" expanded="true" signature="2910:2915" ph="..." />
+            <marker date="1536229948721" expanded="true" signature="4274:4713" ph="..." />
           </folding>
         </state>
       </provider>

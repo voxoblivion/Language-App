@@ -59,12 +59,13 @@ class SampleApp(tk.Tk):
             if unec_frame is not None:
                 unec_frame.destroy()
 
-    def check_entry(self, entry, label=None, native_word=None, image=None):
+    def check_entry(self, entry, label=None, native_word=None, image=None, entry_widget=None):
         if entry.lower() != self.words[str(self.index)][1].lower():
-            # TODO add widget to appear just above test box
             if label is not None:
+                entry_widget.delete(0, 'end')
                 label.config(text="Incorrect, try again")
         else:
+            entry_widget.delete(0, 'end')
             if label is not None:
                 self.next_slide(foreign_text=native_word, image=image)
                 label.config(text="Please enter the word in English associated with this image")
@@ -167,7 +168,6 @@ class Activity1(tk.Frame):
         return_button.grid(row=15, column=2)
 
 
-# TODO clear entry after each entry
 class Activity2(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
@@ -182,7 +182,8 @@ class Activity2(tk.Frame):
         ac2_user = tk.StringVar()
         ac2_entry_1 = tk.Entry(self, textvariable=ac2_user)
         ac2_entry_1.bind("<Return>",
-                         lambda x: master.check_entry(ac2_user.get(), ac2_intro, ac2_native_word, ac2_label_2))
+                         lambda x: master.check_entry(ac2_user.get(), ac2_intro, ac2_native_word, ac2_label_2,
+                                                      ac2_entry_1))
         return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         ac2_intro.grid(row=0)
         ac2_speaker.grid(row=7)
