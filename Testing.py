@@ -7,7 +7,8 @@ import playsound
 
 
 # TODO change menu messages to native language
-# TODO randomize order of data
+# TODO make subject selection menu
+# TODO add percentage completion label on each of the activities
 
 class SampleApp(tk.Tk):
     def __init__(self):
@@ -30,7 +31,7 @@ class SampleApp(tk.Tk):
         self._frame = new_frame
         self._frame.grid()
 
-    def next_slide(self, eng_text=None, foreign_text=None, image=None, slider=None, unec_frame=None, activity=None):
+    def next_slide(self, eng_text=None, foreign_text=None, image=None, unec_frame=None, activity=None):
         if self.index == len(self.words):
             for widget in self._frame.winfo_children():
                 widget.destroy()

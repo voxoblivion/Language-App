@@ -2,40 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1fbf943a-6438-4651-943f-dd2bb57b65e4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Unit_6.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Unit_6.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Testing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Testing.spec" beforeDir="false" afterPath="$PROJECT_DIR$/Testing.spec" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/Testing.exe" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/Testing.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/base_library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/out00-Analysis.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/out00-Analysis.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/out00-COLLECT.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/out00-COLLECT.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/out00-EXE.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/out00-EXE.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/out00-PKG.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/out00-PKG.pkg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/out00-PKG.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/out00-PKG.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/out00-PYZ.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/out00-PYZ.pyz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/out00-PYZ.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/out00-PYZ.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/warnTesting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/warnTesting.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/xref-Testing.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/xref-Testing.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing.exe" beforeDir="false" afterPath="$PROJECT_DIR$/dist/Testing.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/Testing.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/Testing.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/VCRUNTIME140.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/_bz2.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/_ctypes.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/_hashlib.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/_lzma.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/_portaudio.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/_socket.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/_ssl.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/_tkinter.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/pyexpat.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/python36.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/select.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/tcl86t.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Testing/tk86t.dll" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -118,14 +85,15 @@
     <session id="-993955932">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="3" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.11" value="2" />
+          <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.36" value="2" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.59" value="1" />
-          <entry key="project.opened" value="8" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -170,13 +138,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Testing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="77" column="25" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+            <state relative-caret-position="-639">
+              <caret line="122" column="39" lean-forward="true" selection-start-line="122" selection-start-column="39" selection-end-line="122" selection-end-column="39" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <marker date="1536230380804" expanded="true" signature="2960:2961" ph="..." />
-                <marker date="1536230380804" expanded="true" signature="2960:2965" ph="..." />
-                <marker date="1536230380804" expanded="true" signature="4324:4763" ph="..." />
               </folding>
             </state>
           </provider>
@@ -508,7 +473,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49799198" visible="true" weight="0.16136725" />
       <window_info id="Structure" order="1" sideWeight="0.502008" side_tool="true" weight="0.18757921" />
@@ -740,13 +704,10 @@
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36-32/Lib/tkinter/__init__.py" />
     <entry file="file://$PROJECT_DIR$/Testing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="77" column="25" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+        <state relative-caret-position="-639">
+          <caret line="122" column="39" lean-forward="true" selection-start-line="122" selection-start-column="39" selection-end-line="122" selection-end-column="39" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <marker date="1536230380804" expanded="true" signature="2960:2961" ph="..." />
-            <marker date="1536230380804" expanded="true" signature="2960:2965" ph="..." />
-            <marker date="1536230380804" expanded="true" signature="4324:4763" ph="..." />
           </folding>
         </state>
       </provider>
