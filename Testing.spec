@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['Testing.py'],
-             pathex=['C:\\Users\\tomje\\PycharmProjects\\Unit_6'],
+             pathex=['C:\\Users\\tomje\\OneDrive\\Documents\\Test'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=True )
+          console=False )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

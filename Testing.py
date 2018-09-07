@@ -171,7 +171,6 @@ class Activity1(tk.Frame):
 class Activity2(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-
         ac2_intro = tk.Label(self, text="Please enter the word in English associated with this image then press enter")
         ac2_label_2 = tk.Label(self, image=master.image)
         ac2_native_word = tk.Label(self, text=master.words[str(master.index)][0])
