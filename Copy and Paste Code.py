@@ -1,23 +1,22 @@
-import tkinter as tk
-from PIL import Image
-import time
-'''
-root = tk.Tk()
-dir = "Images/mineral_water.png"
-im_temp = Image.open(dir)
-im_temp = im_temp.resize((250, 250), Image.ANTIALIAS)
-im_temp.save(dir, "png")
-photo = tk.PhotoImage(file=dir)
-label1 = tk.Label(image=photo)
-label1.photo = photo
-label1.pack()
-'''
-# start_mins = int(time.strftime("%M", time.localtime()))
-# start_secs = int(time.strftime("%S", time.localtime()))
-# time.sleep(4)
-# end_mins = int(time.strftime("%M", time.localtime()))
-# end_secs = int(time.strftime("%S", time.localtime()))
-# print(str(end_mins - start_mins) + str(end_secs - start_secs))
+import sqlite3
+user_username = "sjohn"
+user_password = "smith1"
+conn = sqlite3.connect("test.db")
+c = conn.cursor()
+usernames_passwords = {}
+for i in c.execute("SELECT * FROM users"):
+    user_id = i[0]
+    first_name = i[1]
+    last_name = i[2]
+    username = str(last_name[0] + first_name).lower()
+    password = (last_name + str(user_id)).lower()
+    usernames_passwords[username] = password
+conn.close()
+if user_username in usernames_passwords.keys() and user_password in usernames_passwords.values():
+    user_username = user_username.split(user_username[0])[1]
+    conn = sqlite3.connect("test.db")
+    name = (user_username.title(), )
+    print(name)
+    c = conn.cursor()
+    c.execute("SELECT permission_level FROM users WHERE first_name =?", name)
 
-for i in range(1, 11):
-    print(i)

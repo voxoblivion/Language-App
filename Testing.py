@@ -4,19 +4,24 @@ import time
 from libary import record_audio_and_play
 import tkinter as tk
 import playsound
+import sqlite3
 
 
+# TODO ADMINS must be able to add new users
+# TODO teachers must be able to assign tasks
 # TODO change menu messages to native language
 # TODO make subject selection menu
 # TODO add percentage completion label on each of the activities
+
 
 class SampleApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self._frame = None
-        self.switch_frame(StartPage)
+        self.switch_frame(LoginPage)
         self.index = 1
         self.score = 0
+        self.user_level = ""
         self.correct = 0
         self.user_ans = ""
         self.language = tk.StringVar()
@@ -63,18 +68,42 @@ class SampleApp(tk.Tk):
     def check_entry(self, entry, label=None, native_word=None, image=None, entry_widget=None):
         if entry.lower() != self.words[str(self.index)][1].lower():
             if label is not None:
-                entry_widget.delete(0, 'end')
                 label.config(text="Incorrect, try again")
+            if entry_widget is not None:
+                entry_widget.delete(0, 'end')
         else:
-            entry_widget.delete(0, 'end')
+            if entry_widget is not None:
+                entry_widget.delete(0, 'end')
             if label is not None:
                 self.next_slide(foreign_text=native_word, image=image)
                 label.config(text="Please enter the word in English associated with this image")
             return True
 
-    # def generate_dict(self):
+    def check_login(self, user_username, user_password, label):
+        conn = sqlite3.connect("test.db")
+        c = conn.cursor()
+        usernames_passwords = {}
+        for i in c.execute("SELECT * FROM users"):
+            user_id = i[0]
+            first_name = i[1]
+            last_name = i[2]
+            username = str(last_name[0] + first_name).lower()
+            password = (last_name + str(user_id)).lower()
+            usernames_passwords[username] = password
+        conn.close()
+        if user_username in usernames_passwords.keys() and user_password in usernames_passwords.values():
+            user_username = user_username.split(user_username[0])[1]
+            conn = sqlite3.connect("test.db")
+            name = (user_username.title(),)
+            c = conn.cursor()
+            c.execute("SELECT permission_level FROM users WHERE first_name =?", name)
+            self.user_level = c.fetchone()[0]
+            self.switch_frame(LangPage)
+        else:
+            print("fail")
+            label.config(text="Incorrect username and password combination please try again")
+
     # TODO fix logic error
-    # noinspection PyTypeChecker
     def calc_score(self, start_time, correct_ans=None):  # The lower the score the better
         multiplier = 1000
         current_time = time.strftime("%H:%M:%S", time.localtime()).split(":")
@@ -103,8 +132,31 @@ class SampleApp(tk.Tk):
         self.words = json.load(open(str(language.get()) + ' Dict'))
         self.switch_frame(MainPage)
 
+# TODO Check login against sql db
+# TODO depending on role grant permissions
+# TODO generate username and password from userID, first and last name
 
-class StartPage(tk.Frame):
+
+class LoginPage(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+        label = tk.Label(self, text="Please enter your username and password.\n "
+                                    "Your username is the first initial of your surname then your full first name"
+                                    "\n e.g. John Smith is sjohn. Your password is your full last name and the userID\n"
+                                    "the teacher provided you e.g. smith1")
+        username = tk.StringVar()
+        username_entry = tk.Entry(self, textvariable=username)
+        password = tk.StringVar()
+        password_entry = tk.Entry(self, textvariable=password)
+        button = tk.Button(self, text="Login", command=lambda: master.check_login(user_username=username.get(),
+                                                          user_password=password.get(), label=label))
+        label.grid()
+        username_entry.grid(pady=10)
+        password_entry.grid()
+        button.grid(pady=10)
+
+
+class LangPage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         label = tk.Label(self, text="Please select your native language")
@@ -133,7 +185,7 @@ class MainPage(tk.Frame):
         page_3_button = tk.Button(self, text="Open activity three",
                                   command=lambda: master.switch_frame(Activity3))
         page_4_button = tk.Button(self, text="Reselect native language",
-                                  command=lambda: master.switch_frame(StartPage))
+                                  command=lambda: master.switch_frame(LangPage))
         start_label.grid()
         page_1_button.grid()
         page_2_button.grid(pady=2)
@@ -157,8 +209,8 @@ class Activity1(tk.Frame):
         ac1_mic = tk.Button(self, image=ac1_image_3, command=record_audio_and_play)
         ac1_mic.image = ac1_image_3
         ac1_start_button = tk.Button(self, text="Next Slide",
-                                     command=lambda: master.next_slide(ac1_eng_word, ac1_native_word, ac1_image,
-                                                                       ac1_start_button))
+                                     command=lambda: master.next_slide(eng_text=ac1_eng_word,
+                                                                       foreign_text=ac1_native_word, image=ac1_image,))
         return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         ac1_native_word.grid(row=0, column=2)
         ac1_eng_word.grid(row=1, column=2)
