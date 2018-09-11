@@ -22,6 +22,7 @@ class SampleApp(tk.Tk):
         self.index = 1
         self.score = 0
         self.user_level = ""
+        self.title = ""
         self.correct = 0
         self.user_ans = ""
         self.language = tk.StringVar()
@@ -98,6 +99,8 @@ class SampleApp(tk.Tk):
             c = conn.cursor()
             c.execute("SELECT permission_level FROM users WHERE first_name =?", name)
             self.user_level = c.fetchone()[0]
+            c.execute("SELECT user_type FROM users WHERE first_name =?", name)
+            self.title = c.fetchone()[0]
             self.switch_frame(LangPage)
         else:
             print("fail")
@@ -132,9 +135,12 @@ class SampleApp(tk.Tk):
         self.words = json.load(open(str(language.get()) + ' Dict'))
         self.switch_frame(MainPage)
 
-# TODO Check login against sql db
+    def add_user(self, first_name, last_name, user_level):
+        conn = sqlite3.connect("test.db")
+        c = conn.cursor()
+
+
 # TODO depending on role grant permissions
-# TODO generate username and password from userID, first and last name
 
 
 class LoginPage(tk.Frame):
@@ -148,6 +154,8 @@ class LoginPage(tk.Frame):
         username_entry = tk.Entry(self, textvariable=username)
         password = tk.StringVar()
         password_entry = tk.Entry(self, textvariable=password)
+        username.set("sjohn")
+        password.set("smith1")
         button = tk.Button(self, text="Login", command=lambda: master.check_login(user_username=username.get(),
                                                           user_password=password.get(), label=label))
         label.grid()
@@ -177,7 +185,7 @@ class MainPage(tk.Frame):
         master.image = tk.PhotoImage(file=master.words[str(master.index)][3])
         master.score = 0
         master.correct = 0
-        start_label = tk.Label(self, text="This is the start page")
+        start_label = tk.Label(self, text="This is the start page. Currently logged in as %s" % master.title)
         page_1_button = tk.Button(self, text="Open activity one",
                                   command=lambda: master.switch_frame(Activity1))
         page_2_button = tk.Button(self, text="Open activity two",
@@ -186,11 +194,17 @@ class MainPage(tk.Frame):
                                   command=lambda: master.switch_frame(Activity3))
         page_4_button = tk.Button(self, text="Reselect native language",
                                   command=lambda: master.switch_frame(LangPage))
+        page_5_button = tk.Button(self, text="Add new user", command=lambda: master.switch_frame(AddUser))
+        page_6_button = tk.Button(self, text="Assign tasks")
         start_label.grid()
         page_1_button.grid()
         page_2_button.grid(pady=2)
         page_3_button.grid(pady=1)
         page_4_button.grid(pady=1)
+        if master.user_level == "ADMIN":
+            page_5_button.grid()
+        if master.title == "Teacher":
+            page_6_button.grid()
 
 
 class Activity1(tk.Frame):
@@ -279,6 +293,29 @@ class Activity3(tk.Frame):
         ac3_label.grid(row=3, columnspan=6, column=0, rowspan=2)
         ac3_start_button.grid(row=5, columnspan=6, column=0)
         return_button.grid(row=6, columnspan=6, column=0)
+
+
+class AddUser(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+        intro = tk.Label(self, text="Fill in the following fields to add a new user")
+        first_name_label = tk.Label(self, text="First Name:")
+        first_name = tk.StringVar()
+        first_name_entry = tk.Entry(self, textvariable=first_name)
+        last_name_label = tk.Label(self, text="Last name")
+        last_name = tk.StringVar()
+        last_name_entry = tk.Entry(self, textvariable=last_name)
+        position_label = tk.Label(self, text="Position")
+        position = tk.StringVar()
+        position_entry = tk.OptionMenu(self, position, "Student", "Teacher", command=lambda x: position.get())
+        add_button = tk.Button(self, text="Add User", command=lambda: master.add_user())
+        intro.grid(row=0, column=0, columnspan=2)
+        first_name_label.grid(row=1, column=0)
+        first_name_entry.grid(row=1, column=1)
+        last_name_label.grid(row=2, column=0)
+        last_name_entry.grid(row=2, column=1)
+        position_label.grid(row=3, column=0)
+        position_entry.grid(row=3, column=1)
 
 
 app = SampleApp()
