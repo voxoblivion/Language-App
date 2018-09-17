@@ -376,7 +376,7 @@ class AssignTask(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         scrollbar = tk.Scrollbar(self)
-        my_list = tk.Listbox(self, yscrollcommand=scrollbar.set, width=30, height=5)
+        my_list = tk.Listbox(self, yscrollcommand=scrollbar.set, width=30, height=3)
         users = {}
         conn = sqlite3.connect("test.db")
         c = conn.cursor()
