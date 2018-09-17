@@ -11,6 +11,7 @@ import time
 # TODO change menu messages to native language
 # TODO make subject selection menu
 # TODO add percentage completion label on each of the activities
+# TODO fix git
 
 
 class SampleApp(tk.Tk):
@@ -102,7 +103,6 @@ class SampleApp(tk.Tk):
             self.title = c.fetchone()[0]
             self.switch_frame(LangPage)
         else:
-            print("fail")
             label.config(text="Incorrect username and password combination please try again")
 
     # TODO fix logic error
@@ -147,7 +147,6 @@ class SampleApp(tk.Tk):
             c.execute("INSERT INTO users VALUES (?,?,?,?,?)", values)
             conn.commit()
             conn.close()
-            print(len(first_name), last_name, user_level)
             print("User added")
         else:
             self._frame.destroy()
@@ -158,7 +157,48 @@ class SampleApp(tk.Tk):
             button.grid()
             self._frame.grid()
 
+    def select_assignment(self, user_id):
+        self._frame.destroy()
+        self._frame = tk.Frame()
+        scrollbar = tk.Scrollbar(self._frame)
+        label = tk.Label(self._frame, text="Please click the tasks you want to assign the users\n"
+                                    "The tasks highlighted are the tasks selected")
+        my_list = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, width=30, height=3)
+        assign_button = tk.Button(self._frame, text="Assign Tasks",
+                                  command=lambda: self.assign_tasks(user_id, subject_list, my_list.curselection()))
+        subjects = glob.glob("Italian/*")
+        subject_list = {}
+        subject_index = 0
+        for subject in subjects:
+            subject_name = ""
+            for i in range(8, len(subject)):
+                subject_name += subject[i]
+            my_list.insert(tk.END, subject_name)
+            subject_list[subject_index] = subject_name
+            subject_index += 1
+        label.grid()
+        my_list.grid()
+        assign_button.grid()
+        self._frame.grid()
 
+    def get_users(self, users_selected, users):
+        user_ids = []
+        for i in users_selected:
+            user_ids.append(users[i][0])
+        self.select_assignment(user_ids)
+
+    def assign_tasks(self, user_id, subject_list, task_selection):
+        conn = sqlite3.connect("test.db")
+        c = conn.cursor()
+        task_list = []
+        for tasks in task_selection:
+            task_list.append(subject_list[tasks])
+        for users in user_id:
+            items = (str(task_list), users, )
+            c.execute("UPDATE users SET tasks = ? WHERE user_id = ?", items)
+        conn.commit()
+        conn.close()
+        self.switch_frame(MainPage)
 # TODO depending on role grant permissions
 
 
@@ -344,7 +384,7 @@ class AddUser(tk.Frame):
         first_name_label = tk.Label(self, text="First Name:")
         first_name = tk.StringVar()
         first_name_entry = tk.Entry(self, textvariable=first_name)
-        last_name_label = tk.Label(self, text="Last name")
+        last_name_label = tk.Label(self, text="Last name:")
         last_name = tk.StringVar()
         last_name_entry = tk.Entry(self, textvariable=last_name)
         position_label = tk.Label(self, text="Position")
@@ -363,31 +403,42 @@ class AddUser(tk.Frame):
         add_button.grid(row=4, column=0, columnspan=2, pady=10)
         return_button.grid(row=5, column=0, columnspan=2)
 
-# Provide users with a way of seeing their tasks
-# How are tasks assigned?
-# Teachers get list of students and select the subject and task
-# Students have page where they see their tasks
-# When the task of complete the tasks get removed from db
-# How to present all users to teachers
 
+''' 
+ Provide users with a way of seeing their tasks 
+ Teachers get list of students and select the subject and task
+ Take list of students selected and give them tasks in db 
+ Students have page where they see their tasks
+ When the task of complete the tasks get removed from db
+ How to present all users to teachers
+'''
 
 # TODO select subject then class
+
+
 class AssignTask(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         scrollbar = tk.Scrollbar(self)
-        my_list = tk.Listbox(self, yscrollcommand=scrollbar.set, width=30, height=3)
+        label = tk.Label(self, text="Please click the users you want to assign the tasks to\n"
+                                    "The users highlighted are the users selected")
+        my_list = tk.Listbox(self, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, width=30, height=3)
         users = {}
         conn = sqlite3.connect("test.db")
         c = conn.cursor()
         c.execute("SELECT user_id, first_name, last_name FROM users WHERE user_type = 'Student'")
+        list_index = 0
         for i in c.fetchall():
-            users[i[0]] = (i[1], i[2])
+            users[list_index] = (i[0], i[1], i[2])
+            list_index += 1
             my_list.insert(tk.END, "UserID: %d Fullname: %s" % (i[0], str(i[1]+" "+i[2])))
         conn.close()
+        next_button = tk.Button(self, text="Next", command=lambda: master.get_users(my_list.curselection(), users))
+        label.grid(row=0)
         my_list.grid(row=1, column=0, columnspan=3)
         scrollbar.config(command=my_list.yview)
         scrollbar.grid(column=3, row=1)
+        next_button.grid(row=3)
 
 
 app = SampleApp()
