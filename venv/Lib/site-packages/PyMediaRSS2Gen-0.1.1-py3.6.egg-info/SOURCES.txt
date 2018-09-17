@@ -1,0 +1,13 @@
+AUTHORS.rst
+CHANGELOG.rst
+LICENSE.txt
+MANIFEST.in
+PyMediaRSS2Gen.py
+README.rst
+setup.cfg
+setup.py
+PyMediaRSS2Gen.egg-info/PKG-INFO
+PyMediaRSS2Gen.egg-info/SOURCES.txt
+PyMediaRSS2Gen.egg-info/dependency_links.txt
+PyMediaRSS2Gen.egg-info/requires.txt
+PyMediaRSS2Gen.egg-info/top_level.txt

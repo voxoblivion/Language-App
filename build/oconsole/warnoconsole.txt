@@ -1,0 +1,22 @@
+missing module named resource - imported by posix, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named posix - imported by os, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named _posixsubprocess - imported by subprocess, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named 'org.python' - imported by pickle, C:\Users\tomje\OneDrive\Documents\Test\Testing.py, xml.sax
+missing module named readline - imported by cmd, code, pdb, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+excluded module named _frozen_importlib - imported by importlib, importlib.abc, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named _frozen_importlib_external - imported by importlib._bootstrap, importlib, importlib.abc, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named _winreg - imported by platform, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named _scproxy - imported by urllib.request
+missing module named java - imported by platform, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named 'java.lang' - imported by platform, C:\Users\tomje\OneDrive\Documents\Test\Testing.py, xml.sax._exceptions
+missing module named vms_lib - imported by platform, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named termios - imported by tty, getpass, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named urllib.pathname2url - imported by urllib, playsound
+missing module named grp - imported by tarfile, shutil, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named pwd - imported by posixpath, tarfile, shutil, http.server, webbrowser, netrc, getpass, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named _dummy_threading - imported by dummy_threading, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named org - imported by copy, C:\Users\tomje\OneDrive\Documents\Test\Testing.py
+missing module named 'gi.repository' - imported by playsound
+missing module named gi - imported by playsound
+missing module named Foundation - imported by playsound
+missing module named AppKit - imported by playsound
