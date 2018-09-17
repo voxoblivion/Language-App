@@ -7,9 +7,7 @@ import sqlite3
 import glob
 import time
 
-# TODO teachers must be able to assign tasks
 # TODO change menu messages to native language
-# TODO make subject selection menu
 # TODO add percentage completion label on each of the activities
 # TODO fix git
 
