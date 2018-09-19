@@ -10,6 +10,8 @@ import time
 # TODO change menu messages to native language
 # TODO add percentage completion label on each of the activities
 # TODO fix git
+# TODO suggestive feature
+# TODO remove task when complete
 
 
 class SampleApp(tk.Tk):
@@ -20,11 +22,13 @@ class SampleApp(tk.Tk):
         self.index = 1
         self.score = 0
         self.user_level = ""
+        self.name = ""
         self.title = ""
         self.correct = 0
         self.user_ans = ""
         self.language = tk.StringVar()
         self.words = {}
+        self.user_id = 0
 
     def switch_frame(self, frame_class, index=1):
         """Destroys current frame and replaces it with a new one."""
@@ -99,6 +103,8 @@ class SampleApp(tk.Tk):
             self.user_level = c.fetchone()[0]
             c.execute("SELECT user_type FROM users WHERE first_name =?", name)
             self.title = c.fetchone()[0]
+            c.execute("SELECT user_id FROM users WHERE first_name =?", name)
+            self.user_id = c.fetchone()[0]
             self.switch_frame(LangPage)
         else:
             label.config(text="Incorrect username and password combination please try again")
@@ -159,11 +165,9 @@ class SampleApp(tk.Tk):
         self._frame.destroy()
         self._frame = tk.Frame()
         scrollbar = tk.Scrollbar(self._frame)
-        label = tk.Label(self._frame, text="Please click the tasks you want to assign the users\n"
-                                    "The tasks highlighted are the tasks selected")
+        label = tk.Label(self._frame, text="Please click the subject for the tasks you want to assign the users\n"
+                                    "The subject highlighted are the subject selected")
         my_list = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, width=30, height=3)
-        assign_button = tk.Button(self._frame, text="Assign Tasks",
-                                  command=lambda: self.assign_tasks(user_id, subject_list, my_list.curselection()))
         subjects = glob.glob("Italian/*")
         subject_list = {}
         subject_index = 0
@@ -174,8 +178,25 @@ class SampleApp(tk.Tk):
             my_list.insert(tk.END, subject_name)
             subject_list[subject_index] = subject_name
             subject_index += 1
+        next_button = tk.Button(self._frame, text="Next",
+                                  command=lambda: self.select_task(user_id, subject_list, my_list.curselection()))
         label.grid()
         my_list.grid()
+        next_button.grid()
+        self._frame.grid()
+
+    def select_task(self, user_id, subject_list, task_selection):
+        self._frame.destroy()
+        self._frame = tk.Frame()
+        label = tk.Label(self._frame, text="Please select the tasks for want for the user to do in the chosen subject")
+        list_box_2 = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, height=3, width=30)
+        tasks = ["Task 1", "Task 2", "Task 3"]
+        for task in tasks:
+            list_box_2.insert(tk.END, task)
+        assign_button = tk.Button(self._frame, text="Assign task",
+                        command=lambda: self.assign_tasks(user_id, subject_list, task_selection, list_box_2.curselection()))
+        label.grid()
+        list_box_2.grid()
         assign_button.grid()
         self._frame.grid()
 
@@ -185,19 +206,31 @@ class SampleApp(tk.Tk):
             user_ids.append(users[i][0])
         self.select_assignment(user_ids)
 
-    def assign_tasks(self, user_id, subject_list, task_selection):
+    def assign_tasks(self, user_id, subject_list, task_selection, tasks):
         conn = sqlite3.connect("test.db")
         c = conn.cursor()
         task_list = []
+        task_no = []
+        for i in tasks:
+            task_no.append("Task " + str(i + 1))
         for tasks in task_selection:
-            task_list.append(subject_list[tasks])
+            for task in task_no:
+                task_list.append(subject_list[tasks] + " "+ task)
         for users in user_id:
             items = (str(task_list), users, )
             c.execute("UPDATE users SET tasks = ? WHERE user_id = ?", items)
         conn.commit()
         conn.close()
         self.switch_frame(MainPage)
-# TODO depending on role grant permissions
+
+    def task_complete(self, task, task_list):
+        conn = sqlite3.connect("test.db")
+        c = conn.cursor()
+        task_list.remove(task)
+        c.execute("UPDATE users SET tasks = '%s' WHERE user_id = '%s'" % (str(task_list), self.user_id))
+        conn.commit()
+        conn.close()
+        self.switch_frame(MainPage)
 
 
 class LoginPage(tk.Frame):
@@ -211,8 +244,8 @@ class LoginPage(tk.Frame):
         username_entry = tk.Entry(self, textvariable=username)
         password = tk.StringVar()
         password_entry = tk.Entry(self, textvariable=password)
-        username.set("sjohn")
-        password.set("smith1")
+        username.set("mrob")
+        password.set("mason2")
         button = tk.Button(self, text="Login", command=lambda: master.check_login(user_username=username.get(),
                                                           user_password=password.get(), label=label))
         label.grid()
@@ -249,6 +282,8 @@ class MainPage(tk.Frame):
                                   command=lambda: master.switch_frame(LangPage))
         page_5_button = tk.Button(self, text="Add new user", command=lambda: master.switch_frame(AddUser))
         page_6_button = tk.Button(self, text="Assign tasks", command=lambda: master.switch_frame(AssignTask))
+        page_7_button = tk.Button(self, text="View tasks", command=lambda: master.switch_frame(ViewTasks))
+        page_8_button = tk.Button(self, text="Logout", command=lambda: master.switch_frame(LoginPage))
         start_label.grid()
         page_1_button.grid()
         page_4_button.grid(pady=1)
@@ -256,6 +291,9 @@ class MainPage(tk.Frame):
             page_5_button.grid()
         if master.title == "Teacher":
             page_6_button.grid()
+        if master.user_level == "USER":
+            page_7_button.grid()
+        page_8_button.grid()
 
 
 class SubjectSelection(tk.Frame):
@@ -406,12 +444,11 @@ class AddUser(tk.Frame):
  Provide users with a way of seeing their tasks 
  Teachers get list of students and select the subject and task
  Take list of students selected and give them tasks in db 
+ Once subjects and users are selected an additional page switch selects the tasks
  Students have page where they see their tasks
  When the task of complete the tasks get removed from db
  How to present all users to teachers
 '''
-
-# TODO select subject then class
 
 
 class AssignTask(tk.Frame):
@@ -437,6 +474,37 @@ class AssignTask(tk.Frame):
         scrollbar.config(command=my_list.yview)
         scrollbar.grid(column=3, row=1)
         next_button.grid(row=3)
+
+
+class ViewTasks(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+        conn = sqlite3.connect("test.db")
+        c = conn.cursor()
+        c.execute("SELECT first_name, last_name FROM users WHERE user_id = '%s'" % master.user_id)
+        full_name = c.fetchall()
+        full_name = "%s %s" % (full_name[0][0], full_name[0][1])
+        label = tk.Label(self, text="Currently assigned tasks for %s:" % full_name)
+        c.execute("SELECT tasks FROM users WHERE user_id = '%s'" % master.user_id)
+        list_box = tk.Listbox(self, height=5, selectmode=tk.MULTIPLE)
+        tasks = c.fetchall()[0][0].split("'")
+        new_list = []
+        for i in tasks:
+            if str.isalpha(i[0]) is True:
+                new_list.append(i)
+        for data in new_list:
+            list_box.insert(tk.END, data)
+        return_button = tk.Button(self, text="Return to home page", command=lambda: master.switch_frame(MainPage))
+        activity_button = tk.Button(self, text="Go to subject selector",
+                                    command=lambda: master.switch_frame(SubjectSelection))
+        complete_button = tk.Button(self, text="Mark as completed",
+                                    command=lambda: master.task_complete(list_box.get(list_box.curselection()), new_list))
+        conn.close()
+        label.grid(row=0)
+        list_box.grid(row=1)
+        activity_button.grid(row=2)
+        complete_button.grid(row=3)
+        return_button.grid(row=4)
 
 
 app = SampleApp()
