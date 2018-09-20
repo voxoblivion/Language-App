@@ -8,10 +8,10 @@ import glob
 import time
 
 # TODO change menu messages to native language
-# TODO add percentage completion label on each of the activities
-# TODO fix git
+# TODO add percentage completion label to activity 3
 # TODO suggestive feature
-# TODO remove task when complete
+# TODO Possibly add new column called tasks completed so teachers can see
+# TODO once a task has been completed automatically remove from task (could be after feedback)
 
 
 class SampleApp(tk.Tk):
@@ -29,6 +29,7 @@ class SampleApp(tk.Tk):
         self.language = tk.StringVar()
         self.words = {}
         self.user_id = 0
+        self.percentage_complete = 0
 
     def switch_frame(self, frame_class, index=1):
         """Destroys current frame and replaces it with a new one."""
@@ -39,7 +40,7 @@ class SampleApp(tk.Tk):
         self._frame = new_frame
         self._frame.grid()
 
-    def next_slide(self, eng_text=None, foreign_text=None, image=None, unec_frame=None, activity=None):
+    def next_slide(self, eng_text=None, foreign_text=None, image=None, unec_frame=None, activity=None, percentage=None):
         if self.index == len(self.words):
             for widget in self._frame.winfo_children():
                 widget.destroy()
@@ -67,8 +68,11 @@ class SampleApp(tk.Tk):
                 image.configure(image=new_image)
             if unec_frame is not None:
                 unec_frame.destroy()
+            if percentage is not None:
+                percentage_complete = str(int((self.index / len(self.words)) * 100) - 10) + '%'
+                percentage.config(text=percentage_complete)
 
-    def check_entry(self, entry, label=None, native_word=None, image=None, entry_widget=None):
+    def check_entry(self, entry, label=None, native_word=None, image=None, entry_widget=None, percentage=None):
         if entry.lower() != self.words[str(self.index)][1].lower():
             if label is not None:
                 label.config(text="Incorrect, try again")
@@ -78,7 +82,7 @@ class SampleApp(tk.Tk):
             if entry_widget is not None:
                 entry_widget.delete(0, 'end')
             if label is not None:
-                self.next_slide(foreign_text=native_word, image=image)
+                self.next_slide(foreign_text=native_word, image=image, percentage=percentage)
                 label.config(text="Please enter the word in English associated with this image")
             return True
 
@@ -215,7 +219,7 @@ class SampleApp(tk.Tk):
             task_no.append("Task " + str(i + 1))
         for tasks in task_selection:
             for task in task_no:
-                task_list.append(subject_list[tasks] + " "+ task)
+                task_list.append(subject_list[tasks] + " " + task)
         for users in user_id:
             items = (str(task_list), users, )
             c.execute("UPDATE users SET tasks = ? WHERE user_id = ?", items)
@@ -227,7 +231,7 @@ class SampleApp(tk.Tk):
         conn = sqlite3.connect("test.db")
         c = conn.cursor()
         task_list.remove(task)
-        c.execute("UPDATE users SET tasks = '%s' WHERE user_id = '%s'" % (str(task_list), self.user_id))
+        c.execute("UPDATE users SET tasks = ? WHERE user_id = ?", (str(task_list), self.user_id,))
         conn.commit()
         conn.close()
         self.switch_frame(MainPage)
@@ -319,6 +323,7 @@ class ActivitySelector(tk.Frame):
         ac1 = tk.Button(self, text="Activity 1", command=lambda: master.switch_frame(Activity1))
         ac2 = tk.Button(self, text="Activity 2", command=lambda: master.switch_frame(Activity2))
         ac3 = tk.Button(self, text="Activity 3", command=lambda: master.switch_frame(Activity3))
+        master.percentage_complete = str(int((master.index/len(master.words)) * 100) - 10)+'%'
         label.grid()
         ac1.grid()
         ac2.grid()
@@ -342,11 +347,14 @@ class Activity1(tk.Frame):
         ac1_mic.image = ac1_image_3
         ac1_start_button = tk.Button(self, text="Next Slide",
                                      command=lambda: master.next_slide(eng_text=ac1_eng_word,
+                                                                       percentage=percentage_label,
                                                                        foreign_text=ac1_native_word, image=ac1_image,))
         return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
+        percentage_label = tk.Label(self, text=master.percentage_complete)
         ac1_native_word.grid(row=0, column=2)
         ac1_eng_word.grid(row=1, column=2)
         ac1_mic.grid(row=2, column=1, padx=10)
+        percentage_label.grid(row=2, column=2)
         ac1_speaker.grid(row=2, column=3, padx=10)
         ac1_image.grid(row=3, rowspan=10, column=0, columnspan=5)
         ac1_start_button.grid(row=14, column=2)
@@ -367,12 +375,14 @@ class Activity2(tk.Frame):
         ac2_entry_1 = tk.Entry(self, textvariable=ac2_user)
         ac2_entry_1.bind("<Return>",
                          lambda x: master.check_entry(ac2_user.get(), ac2_intro, ac2_native_word, ac2_label_2,
-                                                      ac2_entry_1))
+                                                      ac2_entry_1, percentage=percentage_label))
         return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
+        percentage_label = tk.Label(self, text=master.percentage_complete)
         ac2_intro.grid(row=0)
         ac2_speaker.grid(row=7)
         ac2_native_word.grid(row=1)
-        ac2_label_2.grid(row=2)
+        percentage_label.grid(row=2)
+        ac2_label_2.grid(row=3)
         ac2_entry_1.grid(row=9, rowspan=2, pady=6)
         return_button.grid(row=13)
 
