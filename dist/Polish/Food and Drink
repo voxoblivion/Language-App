@@ -1,0 +1,10 @@
+{"1": ["woda mineralna", "mineral water", "Audio/mineral_water.mp3", "Images/mineral_water.png"],
+  "2": ["czarna kawa","a black coffee", "Audio/black_coffee.mp3", "Images/black_coffee.png"],
+  "3": ["herbata z cytryną","tea with lemon", "Audio/tea_with_lemon.mp3", "Images/tea_with_lemon.png"],
+  "4": ["cukier","sugar", "Audio/sugar.mp3", "Images/sugar.png"],
+  "5": ["mleko","milk", "Audio/milk.mp3", "Images/milk.png"],
+  "6": ["sól","salt","Audio/salt.mp3","Images/salt.png"],
+  "7": ["pieprz", "pepper","Audio/pepper.mp3","Images/pepper.png"],
+  "8": ["Stolik dla dwojga proszę","A table for two please", "Audio/a_table_for_two_please.mp3", "Images/table_for_two.png"],
+  "9":["Oto menu.","Here is the menu", "Audio/here_is_the_menu.mp3", "Images/here_is_the_menu.png"],
+  "10": ["Chcesz zamówić?","Do you want to order", "Audio/do_you_want_to_order.mp3", "Images/do_you_want_to_order.png"]}

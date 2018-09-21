@@ -12,6 +12,7 @@ import time
 # TODO suggestive feature
 # TODO Possibly add new column called tasks completed so teachers can see
 # TODO once a task has been completed automatically remove from task (could be after feedback)
+# TODO add exit button
 
 
 class SampleApp(tk.Tk):
@@ -30,9 +31,12 @@ class SampleApp(tk.Tk):
         self.words = {}
         self.user_id = 0
         self.percentage_complete = 0
+        self.subject = ""
 
-    def switch_frame(self, frame_class, index=1):
+    def switch_frame(self, frame_class, lang=None, index=1):
         """Destroys current frame and replaces it with a new one."""
+        if lang is not None:
+            self.language = lang
         self.index = index
         new_frame = frame_class(self)
         if self._frame is not None:
@@ -56,6 +60,8 @@ class SampleApp(tk.Tk):
                 button = tk.Button(temp_frame, text="Continue", command=lambda: self.switch_frame(MainPage))
                 label.grid()
                 button.grid()
+            conn = sqlite3.connect()
+            c = conn.cursor()
         else:
             self.index += 1
             if eng_text is not None:
@@ -138,9 +144,10 @@ class SampleApp(tk.Tk):
         self.calc_score(start_time, correct_ans)
         self.next_slide(eng_text=eng_text, activity="Activity3")
 
-    def generate_dict(self, language):
-        self.words = json.load(open('%s/Food and Drink' % str(language.get())))
-        self.switch_frame(MainPage)
+    def generate_dict(self, subject):
+        self.words = json.load(open('%s/%s' % (self.language, subject)))
+        self.subject = subject
+        self.switch_frame(ActivitySelector)
 
     def add_user(self, first_name="", last_name="", user_level=""):
         if len(first_name) != 0 and len(last_name) != 0 and len(user_level) != 0:
@@ -155,7 +162,6 @@ class SampleApp(tk.Tk):
             c.execute("INSERT INTO users VALUES (?,?,?,?,?)", values)
             conn.commit()
             conn.close()
-            print("User added")
         else:
             self._frame.destroy()
             self._frame = tk.Frame()
@@ -264,8 +270,8 @@ class LangPage(tk.Frame):
         label = tk.Label(self, text="Please select your native language")
         self.language = tk.StringVar(self)
         self.language.set("Italian")
-        menu = tk.OptionMenu(self, self.language, "Italian", "Polish", command=lambda x: master.generate_dict(
-            self.language))
+        menu = tk.OptionMenu(self, self.language, "Italian", "Polish", command=lambda x: master.switch_frame(MainPage,
+                                                                                self.language.get()))
         menu.place(x=10, y=10)
         label.grid()
         menu.grid()
@@ -276,7 +282,6 @@ class LangPage(tk.Frame):
 class MainPage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        master.image = tk.PhotoImage(file=master.words[str(master.index)][3])
         master.score = 0
         master.correct = 0
         start_label = tk.Label(self, text="This is the start page. Currently logged in as %s" % master.title)
@@ -310,7 +315,7 @@ class SubjectSelection(tk.Frame):
             subject_name = ""
             for i in range(8, len(subject)):
                 subject_name += subject[i]
-            button = tk.Button(self, text=subject_name, command=lambda: master.switch_frame(ActivitySelector))
+            button = tk.Button(self, text=subject_name, command=lambda: master.generate_dict(button.cget('text')))
             subjects_buttons.append(button)
         for button in subjects_buttons:
             button.grid()
@@ -319,6 +324,7 @@ class SubjectSelection(tk.Frame):
 class ActivitySelector(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
+        master.image = tk.PhotoImage(file=master.words[str(master.index)][3])
         label = tk.Label(self, text="Please select you activity")
         ac1 = tk.Button(self, text="Activity 1", command=lambda: master.switch_frame(Activity1))
         ac2 = tk.Button(self, text="Activity 2", command=lambda: master.switch_frame(Activity2))

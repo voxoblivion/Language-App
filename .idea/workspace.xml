@@ -3,8 +3,22 @@
   <component name="ChangeListManager">
     <list default="true" id="1fbf943a-6438-4651-943f-dd2bb57b65e4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ArtWrk.ppm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Copy and Paste Code.py" beforeDir="false" afterPath="$PROJECT_DIR$/Copy and Paste Code.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Needed Files/Italian Dict" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Needed Files/Polish Dict" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Testing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Testing.spec" beforeDir="false" afterPath="$PROJECT_DIR$/Testing.spec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Testing/Testing.exe.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/Testing.exe.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Testing/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Testing/xref-Testing.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/xref-Testing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/Testing.exe" beforeDir="false" afterPath="$PROJECT_DIR$/dist/Testing.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/oconsole.spec" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/test.db" beforeDir="false" afterPath="$PROJECT_DIR$/test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_audio.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_audio0.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_audio1.wav" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -156,28 +170,29 @@
     <session id="847799196">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.10" value="2" />
           <entry key="project.open.time.11" value="1" />
-          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.12" value="2" />
           <entry key="project.open.time.13" value="2" />
           <entry key="project.open.time.15" value="2" />
-          <entry key="project.open.time.16" value="1" />
+          <entry key="project.open.time.16" value="2" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.19" value="1" />
+          <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="12" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="31" />
-          <entry key="py" value="10432" />
+          <entry key="py" value="11025" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="10463" />
+          <entry key="Python" value="11056" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -203,8 +218,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Testing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-427">
-              <caret line="377" column="94" selection-start-line="377" selection-start-column="94" selection-end-line="377" selection-end-column="94" />
+            <state relative-caret-position="-3749">
+              <caret line="33" column="24" selection-start-line="33" selection-start-column="24" selection-end-line="33" selection-end-column="24" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -224,8 +239,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/tkinter/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="24480">
-              <caret line="1443" selection-start-line="1443" selection-end-line="1443" />
+            <state relative-caret-position="97">
+              <caret line="2297" selection-start-line="2297" selection-end-line="2297" />
             </state>
           </provider>
         </entry>
@@ -233,11 +248,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Copy and Paste Code.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="29" column="100" selection-start-line="29" selection-start-column="51" selection-end-line="29" selection-end-column="100" />
+            <state relative-caret-position="238">
+              <caret line="14" column="6" lean-forward="true" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
-                <marker date="1537188124533" expanded="true" signature="319:431" ph="..." />
               </folding>
             </state>
           </provider>
@@ -253,11 +267,6 @@
               </folding>
             </state>
           </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Testing.spec">
-          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -310,13 +319,13 @@
       <find>ANTI</find>
       <find>sub</find>
       <find>MainP</find>
-      <find>words</find>
       <find>self.words</find>
       <find>END</find>
       <find>check_entry</find>
       <find>'END'</find>
       <find>dict</find>
       <find>self</find>
+      <find>words</find>
       <find>print</find>
     </findStrings>
   </component>
@@ -380,11 +389,6 @@
             <path>
               <item name="Language-App-master" type="b2602c69:ProjectViewProjectNode" />
               <item name="Language-App-master" type="462c0819:PsiDirectoryNode" />
-              <item name="Italian" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Language-App-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Language-App-master" type="462c0819:PsiDirectoryNode" />
               <item name="Polish" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -399,14 +403,14 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master\Italian" />
+      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master\Polish" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6\Images" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6\Audio" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master\Italian" />
-      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master\Polish" />
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6\Images" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6\Audio" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6" />
@@ -424,7 +428,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Testing">
+  <component name="RunManager" selected="Python.Copy and Paste Code">
     <configuration name="Copy and Paste Code" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Unit_6" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -517,8 +521,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Testing" />
         <item itemvalue="Python.Copy and Paste Code" />
+        <item itemvalue="Python.Testing" />
         <item itemvalue="Python.libary" />
         <item itemvalue="Python.Main" />
       </list>
@@ -704,11 +708,7 @@
     <entry file="file://$PROJECT_DIR$/Audio/mineral_water.mp3">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/user_audio1.wav">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1632" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/user_audio1.wav" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/_bootlocale.py" />
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/playsound.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -729,15 +729,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/user_audio0.wav">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/user_audio0.wav" />
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/sounddevice.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/ArtWrk.ppm">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/ArtWrk.ppm" />
     <entry file="file://$PROJECT_DIR$/Images/black_coffee_new.png" />
     <entry file="file://$PROJECT_DIR$/Images/black_coffee.png">
       <provider selected="true" editor-type-id="images" />
@@ -786,40 +782,8 @@
     <entry file="file://$PROJECT_DIR$/test.db">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Testing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-427">
-          <caret line="377" column="94" selection-start-line="377" selection-start-column="94" selection-end-line="377" selection-end-column="94" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Italian/Food and Drink">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/tkinter/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="24480">
-          <caret line="1443" selection-start-line="1443" selection-end-line="1443" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Copy and Paste Code.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="29" column="100" selection-start-line="29" selection-start-column="51" selection-end-line="29" selection-end-column="100" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-            <marker date="1537188124533" expanded="true" signature="319:431" ph="..." />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/Testing.spec">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/libary.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -831,9 +795,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Testing.spec">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Images/pepper.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -843,10 +804,44 @@
     <entry file="file://$PROJECT_DIR$/Images/mineral_water.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/tkinter/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="2297" selection-start-line="2297" selection-end-line="2297" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Italian/Food and Drink">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Polish/Food and Drink">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Copy and Paste Code.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="6" lean-forward="true" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Testing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3749">
+          <caret line="33" column="24" selection-start-line="33" selection-start-column="24" selection-end-line="33" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
