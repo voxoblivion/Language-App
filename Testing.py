@@ -12,7 +12,6 @@ import time
 # TODO suggestive feature
 # TODO Possibly add new column called tasks completed so teachers can see
 # TODO once a task has been completed automatically remove from task (could be after feedback)
-# TODO add exit button
 
 
 class SampleApp(tk.Tk):
@@ -30,7 +29,7 @@ class SampleApp(tk.Tk):
         self.language = tk.StringVar()
         self.words = {}
         self.user_id = 0
-        self.percentage_complete = 0
+        self.percentage_complete = 10
         self.subject = ""
 
     def switch_frame(self, frame_class, lang=None, index=1):
@@ -60,8 +59,6 @@ class SampleApp(tk.Tk):
                 button = tk.Button(temp_frame, text="Continue", command=lambda: self.switch_frame(MainPage))
                 label.grid()
                 button.grid()
-            conn = sqlite3.connect()
-            c = conn.cursor()
         else:
             self.index += 1
             if eng_text is not None:
@@ -75,8 +72,9 @@ class SampleApp(tk.Tk):
             if unec_frame is not None:
                 unec_frame.destroy()
             if percentage is not None:
-                percentage_complete = str(int((self.index / len(self.words)) * 100) - 10) + '%'
+                percentage_complete = str(int((self.index / len(self.words)) * 100)) + '%'
                 percentage.config(text=percentage_complete)
+                percentage.grid()
 
     def check_entry(self, entry, label=None, native_word=None, image=None, entry_widget=None, percentage=None):
         if entry.lower() != self.words[str(self.index)][1].lower():
@@ -149,7 +147,7 @@ class SampleApp(tk.Tk):
         self.subject = subject
         self.switch_frame(ActivitySelector)
 
-    def add_user(self, first_name="", last_name="", user_level=""):
+    def add_user(self, first_name="", last_name="", user_level="", tasks=None, tasks_completed=None):
         if len(first_name) != 0 and len(last_name) != 0 and len(user_level) != 0:
             conn = sqlite3.connect("test.db")
             c = conn.cursor()
@@ -158,10 +156,11 @@ class SampleApp(tk.Tk):
             user_perms = "USER"
             if user_level == "Teacher":
                 user_perms = "ADMIN"
-            values = (user_no, first_name, last_name, user_level, user_perms)
-            c.execute("INSERT INTO users VALUES (?,?,?,?,?)", values)
+            values = (user_no, first_name, last_name, user_level, user_perms, tasks, tasks_completed)
+            c.execute("INSERT INTO users VALUES (?,?,?,?,?,?,?)", values)
             conn.commit()
             conn.close()
+            self.switch_frame(MainPage)
         else:
             self._frame.destroy()
             self._frame = tk.Frame()
@@ -233,10 +232,11 @@ class SampleApp(tk.Tk):
         conn.close()
         self.switch_frame(MainPage)
 
-    def task_complete(self, task, task_list):
+    def task_complete(self, tasks, task_list):
         conn = sqlite3.connect("test.db")
         c = conn.cursor()
-        task_list.remove(task)
+        for task in tasks:
+            task_list.remove(task)
         c.execute("UPDATE users SET tasks = ? WHERE user_id = ?", (str(task_list), self.user_id,))
         conn.commit()
         conn.close()
@@ -252,16 +252,20 @@ class LoginPage(tk.Frame):
                                     "the teacher provided you e.g. smith1")
         username = tk.StringVar()
         username_entry = tk.Entry(self, textvariable=username)
+        username_label = tk.Label(self, text="Username:")
         password = tk.StringVar()
         password_entry = tk.Entry(self, textvariable=password)
-        username.set("mrob")
-        password.set("mason2")
+        password_label = tk.Label(self, text="Password:")
+        username.set("mkylian")
+        password.set("mbappe7")
         button = tk.Button(self, text="Login", command=lambda: master.check_login(user_username=username.get(),
                                                           user_password=password.get(), label=label))
-        label.grid()
-        username_entry.grid(pady=10)
-        password_entry.grid()
-        button.grid(pady=10)
+        label.grid(row=0, column=0, columnspan=8)
+        username_label.grid(column=4, row=2)
+        username_entry.grid(column=5, row=2)
+        password_entry.grid(column=5, row=3)
+        password_label.grid(column=4, row=3)
+        button.grid(row=4, column=0, columnspan=8, pady=5)
 
 
 class LangPage(tk.Frame):
@@ -284,18 +288,19 @@ class MainPage(tk.Frame):
         tk.Frame.__init__(self, master)
         master.score = 0
         master.correct = 0
-        start_label = tk.Label(self, text="This is the start page. Currently logged in as %s" % master.title)
+        start_label = tk.Label(self, text="Main Menu - %s" % master.title)
         page_1_button = tk.Button(self, text="Subject Selector",
                                   command=lambda: master.switch_frame(SubjectSelection))
-        page_4_button = tk.Button(self, text="Reselect native language",
+        page_4_button = tk.Button(self, text="Re-select native language",
                                   command=lambda: master.switch_frame(LangPage))
         page_5_button = tk.Button(self, text="Add new user", command=lambda: master.switch_frame(AddUser))
         page_6_button = tk.Button(self, text="Assign tasks", command=lambda: master.switch_frame(AssignTask))
-        page_7_button = tk.Button(self, text="View tasks", command=lambda: master.switch_frame(ViewTasks))
+        page_7_button = tk.Button(self, text="View assigned tasks", command=lambda: master.switch_frame(ViewTasks))
         page_8_button = tk.Button(self, text="Logout", command=lambda: master.switch_frame(LoginPage))
+        exit_button = tk.Button(self, text="Quit", command=self.quit)
         start_label.grid()
         page_1_button.grid()
-        page_4_button.grid(pady=1)
+        page_4_button.grid(pady=1, padx=5)
         if master.user_level == "ADMIN":
             page_5_button.grid()
         if master.title == "Teacher":
@@ -303,6 +308,7 @@ class MainPage(tk.Frame):
         if master.user_level == "USER":
             page_7_button.grid()
         page_8_button.grid()
+        exit_button.grid(pady=2)
 
 
 class SubjectSelection(tk.Frame):
@@ -325,11 +331,11 @@ class ActivitySelector(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         master.image = tk.PhotoImage(file=master.words[str(master.index)][3])
-        label = tk.Label(self, text="Please select you activity")
+        label = tk.Label(self, text="Please select an activity")
         ac1 = tk.Button(self, text="Activity 1", command=lambda: master.switch_frame(Activity1))
         ac2 = tk.Button(self, text="Activity 2", command=lambda: master.switch_frame(Activity2))
         ac3 = tk.Button(self, text="Activity 3", command=lambda: master.switch_frame(Activity3))
-        master.percentage_complete = str(int((master.index/len(master.words)) * 100) - 10)+'%'
+        master.percentage_complete = str(int((master.index/len(master.words)) * 100))+'%'
         label.grid()
         ac1.grid()
         ac2.grid()
@@ -354,7 +360,7 @@ class Activity1(tk.Frame):
         ac1_start_button = tk.Button(self, text="Next Slide",
                                      command=lambda: master.next_slide(eng_text=ac1_eng_word,
                                                                        percentage=percentage_label,
-                                                                       foreign_text=ac1_native_word, image=ac1_image,))
+                                                                       foreign_text=ac1_native_word, image=ac1_image))
         return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         percentage_label = tk.Label(self, text=master.percentage_complete)
         ac1_native_word.grid(row=0, column=2)
@@ -370,7 +376,8 @@ class Activity1(tk.Frame):
 class Activity2(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        ac2_intro = tk.Label(self, text="Please enter the word in English associated with this image then press enter")
+        ac2_intro = tk.Label(self, text="Please enter the word in English associated\n"
+                                        "with this image then press enter")
         ac2_label_2 = tk.Label(self, image=master.image)
         ac2_native_word = tk.Label(self, text=master.words[str(master.index)][0])
         ac2_image_2 = tk.PhotoImage(file='Images/Speaker.png')
@@ -380,17 +387,17 @@ class Activity2(tk.Frame):
         ac2_user = tk.StringVar()
         ac2_entry_1 = tk.Entry(self, textvariable=ac2_user)
         ac2_entry_1.bind("<Return>",
-                         lambda x: master.check_entry(ac2_user.get(), ac2_intro, ac2_native_word, ac2_label_2,
-                                                      ac2_entry_1, percentage=percentage_label))
+                         lambda x: master.check_entry(ac2_user.get(), label=ac2_intro, native_word=ac2_native_word,
+                                                      image=ac2_label_2, entry_widget=ac2_entry_1, percentage=percentage_label))
         return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         percentage_label = tk.Label(self, text=master.percentage_complete)
-        ac2_intro.grid(row=0)
-        ac2_speaker.grid(row=7)
-        ac2_native_word.grid(row=1)
-        percentage_label.grid(row=2)
-        ac2_label_2.grid(row=3)
-        ac2_entry_1.grid(row=9, rowspan=2, pady=6)
-        return_button.grid(row=13)
+        ac2_intro.grid(row=0, rowspan=2)
+        ac2_speaker.grid(row=8)
+        ac2_native_word.grid(row=2)
+        percentage_label.grid(row=3)
+        ac2_label_2.grid(row=4)
+        ac2_entry_1.grid(row=10, rowspan=2, pady=6)
+        return_button.grid(row=14)
 
 
 class Activity3(tk.Frame):
@@ -497,13 +504,12 @@ class ViewTasks(tk.Frame):
         tk.Frame.__init__(self, master)
         conn = sqlite3.connect("test.db")
         c = conn.cursor()
-        c.execute("SELECT first_name, last_name FROM users WHERE user_id = '%s'" % master.user_id)
-        full_name = c.fetchall()
-        full_name = "%s %s" % (full_name[0][0], full_name[0][1])
+        c.execute("SELECT first_name, last_name, tasks FROM users WHERE user_id = '%s'" % master.user_id)
+        first_name, last_name, tasks = c.fetchall()[0]
+        full_name = "%s %s" % (first_name, last_name)
         label = tk.Label(self, text="Currently assigned tasks for %s:" % full_name)
-        c.execute("SELECT tasks FROM users WHERE user_id = '%s'" % master.user_id)
         list_box = tk.Listbox(self, height=5, selectmode=tk.MULTIPLE)
-        tasks = c.fetchall()[0][0].split("'")
+        tasks = tasks.split("'")
         new_list = []
         for i in tasks:
             if str.isalpha(i[0]) is True:
@@ -514,7 +520,8 @@ class ViewTasks(tk.Frame):
         activity_button = tk.Button(self, text="Go to subject selector",
                                     command=lambda: master.switch_frame(SubjectSelection))
         complete_button = tk.Button(self, text="Mark as completed",
-                                    command=lambda: master.task_complete(list_box.get(list_box.curselection()), new_list))
+                command=lambda: master.task_complete([list_box.get(selection) for selection in list_box.curselection()],
+                new_list))
         conn.close()
         label.grid(row=0)
         list_box.grid(row=1)
