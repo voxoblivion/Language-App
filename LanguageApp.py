@@ -9,9 +9,10 @@ import time
 
 # TODO change menu messages to native language
 # TODO add percentage completion label to activity 3
-# TODO suggestive feature
 # TODO Possibly add new column called tasks completed so teachers can see
 # TODO once a task has been completed automatically remove from task (could be after feedback)
+# TODO play sound after completion of activity
+# TODO add no. of questions correct on activity 3
 
 
 class SampleApp(tk.Tk):
@@ -31,6 +32,7 @@ class SampleApp(tk.Tk):
         self.user_id = 0
         self.percentage_complete = 10
         self.subject = ""
+        self.activity = ""
 
     def switch_frame(self, frame_class, lang=None, index=1):
         """Destroys current frame and replaces it with a new one."""
@@ -48,9 +50,11 @@ class SampleApp(tk.Tk):
             for widget in self._frame.winfo_children():
                 widget.destroy()
             temp_frame = self._frame
-            if activity == "Activity3":
+            if self.activity == "Activity 3":
+                out_of_10 = tk.Label(temp_frame, text="You got " + str(self.correct) + " out of 10 right")
                 score = tk.Label(temp_frame, text="Your score is: " + str(self.score))
                 button = tk.Button(temp_frame, text="Return to start page", command=lambda: self.switch_frame(MainPage))
+                out_of_10.grid()
                 score.grid()
                 button.grid()
             else:
@@ -59,6 +63,19 @@ class SampleApp(tk.Tk):
                 button = tk.Button(temp_frame, text="Continue", command=lambda: self.switch_frame(MainPage))
                 label.grid()
                 button.grid()
+            conn = sqlite3.connect("test.db")
+            c = conn.cursor()
+            items = [str(self.subject+" "+self.activity), self.user_id]
+            c.execute("SELECT tasks_completed FROM users WHERE user_id = ?", str(items[1]))
+            old_tasks_completed = c.fetchone()[0]
+            if old_tasks_completed is not None:
+                if items[0] not in old_tasks_completed:
+                    items[0] = str(old_tasks_completed + ", " + items[0])
+                    c.execute("UPDATE users SET tasks_completed = ? WHERE user_id = ?", items)
+            else:
+                c.execute("UPDATE users SET tasks_completed = ? WHERE user_id = ?", items)
+            conn.commit()
+            conn.close()
         else:
             self.index += 1
             if eng_text is not None:
@@ -345,6 +362,7 @@ class ActivitySelector(tk.Frame):
 class Activity1(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
+        master.activity = "Activity 1"
         ac1_native_word = tk.Label(self, text=master.words[str(master.index)][0])
         ac1_eng_word = tk.Label(self, text=master.words[str(master.index)][1])
         ac1_image_2 = tk.PhotoImage(file='Images/Speaker.png')
@@ -376,6 +394,7 @@ class Activity1(tk.Frame):
 class Activity2(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
+        master.activity = "Activity 2"
         ac2_intro = tk.Label(self, text="Please enter the word in English associated\n"
                                         "with this image then press enter")
         ac2_label_2 = tk.Label(self, image=master.image)
@@ -404,6 +423,7 @@ class Activity3(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         master.index = 0
+        master.activity = "Activity 3"
         self.image_dirs = []
         self.button_list = []
         self.image_dict = {}
@@ -528,6 +548,11 @@ class ViewTasks(tk.Frame):
         activity_button.grid(row=2)
         complete_button.grid(row=3)
         return_button.grid(row=4)
+
+
+class ViewStudentsTasks(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
 
 
 app = SampleApp()
