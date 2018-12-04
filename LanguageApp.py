@@ -10,6 +10,8 @@ import time
 # TODO change menu messages to native language
 # TODO once a task has been completed automatically remove from task (could be after feedback)
 # TODO play sound after completion of activity
+# TODO add a scoreboard for activity 3
+# TODO randomize order to engage user
 
 
 class SampleApp(tk.Tk):
@@ -132,18 +134,18 @@ class SampleApp(tk.Tk):
         else:
             label.config(text="Incorrect username and password combination please try again")
 
-    # TODO fix logic error
     def calc_score(self, start_time, correct_ans=None):  # The lower the score the better
+        if self.index == 1:
+            start_time = time.strftime("%H:%M:%S", time.localtime()).split(":")
         multiplier = 1000
-        current_time = time.strftime("%H:%M:%S", time.localtime()).split(":")
-        if abs(int(start_time[0]) - int(current_time[0])) > 1:
-            current_time[1] = int(current_time[1]) + (60 * abs(int(start_time[0]) - int(current_time[0])))
-        min_diff = abs(int(current_time[1]) - int(start_time[1]))
-        sec_diff = abs(int(current_time[2]) - int(start_time[2]))
         if correct_ans is True:
             self.correct += 1
         if self.index == len(self.words):
-            score = (multiplier * min_diff) + (multiplier * (sec_diff / 60))
+            current_time = time.strftime("%H:%M:%S", time.localtime()).split(":")
+            start_secs = int((int(start_time[0]) * (60**2)) + (int(start_time[1]) * 60) + (int(start_time[2])))
+            current_secs = int((int(current_time[0]) * (60**2)) + (int(current_time[1]) * 60) + (int(current_time[2])))
+            sec_diff = current_secs - start_secs
+            score = (sec_diff/60) * multiplier
             self.score += round(score)
             incorrect = len(self.words) - self.correct
             self.score += incorrect * 1000
