@@ -44,7 +44,7 @@ class SampleApp(tk.Tk):
         self._frame = new_frame
         self._frame.grid()
 
-    def next_slide(self, eng_text=None, foreign_text=None, image=None, unec_frame=None, activity=None, percentage=None):
+    def next_slide(self, eng_text=None, foreign_text=None, image=None, unec_frame=None, percentage=None):
         if self.index == len(self.words):
             for widget in self._frame.winfo_children():
                 widget.destroy()
@@ -64,8 +64,8 @@ class SampleApp(tk.Tk):
                 button.grid()
             conn = sqlite3.connect("test.db")
             c = conn.cursor()
-            items = [str(self.subject+" "+self.activity), self.user_id]
-            c.execute("SELECT tasks_completed FROM users WHERE user_id = ?", str(items[1]))
+            items = [str(self.subject+" "+self.activity), str(self.user_id)]
+            c.execute("SELECT tasks_completed FROM users WHERE user_id = ?", (items[1],))  #Issue occurring if user_id is over 9 possibly counter all users with 1
             old_tasks_completed = c.fetchone()[0]
             if old_tasks_completed is not None:
                 if items[0] not in old_tasks_completed:
@@ -120,7 +120,7 @@ class SampleApp(tk.Tk):
             usernames_passwords[username] = password
         conn.close()
         if user_username in usernames_passwords.keys() and user_password in usernames_passwords.values():
-            user_username = user_username.split(user_username[0])[1]
+            user_username = user_username.split(user_username[0], 1)[1]
             conn = sqlite3.connect("test.db")
             name = (user_username.title(),)
             c = conn.cursor()
@@ -157,7 +157,7 @@ class SampleApp(tk.Tk):
         else:
             correct_ans = False
         self.calc_score(start_time, correct_ans)
-        self.next_slide(eng_text=eng_text, activity="Activity3")
+        self.next_slide(eng_text=eng_text)
 
     def generate_dict(self, subject):
         self.words = json.load(open('%s/%s' % (self.language, subject)))
