@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1fbf943a-6438-4651-943f-dd2bb57b65e4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LanguageApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/LanguageApp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.db" beforeDir="false" afterPath="$PROJECT_DIR$/test.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -156,7 +154,7 @@
     <session id="847799196">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="27" />
+          <entry key="project.closed" value="28" />
           <entry key="project.open.time.10" value="2" />
           <entry key="project.open.time.11" value="3" />
           <entry key="project.open.time.12" value="3" />
@@ -167,8 +165,8 @@
           <entry key="project.open.time.17" value="2" />
           <entry key="project.open.time.18" value="3" />
           <entry key="project.open.time.19" value="3" />
-          <entry key="project.open.time.20" value="4" />
-          <entry key="project.open.time.21" value="1" />
+          <entry key="project.open.time.20" value="5" />
+          <entry key="project.open.time.21" value="2" />
           <entry key="project.open.time.22" value="2" />
           <entry key="project.open.time.24" value="1" />
           <entry key="project.open.time.28" value="1" />
@@ -179,7 +177,7 @@
           <entry key="project.open.time.37" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="50" />
+          <entry key="project.opened" value="52" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -198,13 +196,13 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="14" />
+          <entry key="Python" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="Italian Dict" value="1" />
-          <entry key="py" value="14" />
+          <entry key="py" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -218,7 +216,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LanguageApp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
+            <state relative-caret-position="3758">
               <caret line="296" column="28" selection-start-line="296" selection-start-column="28" selection-end-line="296" selection-end-column="28" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -239,8 +237,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/tkinter/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="1703" lean-forward="true" selection-start-line="1703" selection-end-line="1703" />
+            <state relative-caret-position="28900">
+              <caret line="1703" selection-start-line="1703" selection-end-line="1703" />
             </state>
           </provider>
         </entry>
@@ -391,11 +389,6 @@
               <item name="Language-App-master" type="b2602c69:ProjectViewProjectNode" />
               <item name="Language-App-master" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Language-App-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Language-App-master" type="462c0819:PsiDirectoryNode" />
-              <item name="Italian" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -408,14 +401,15 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master\Italian" />
-      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master\Polish" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6\Images" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6\Audio" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master\Italian" />
+      <recent name="C:\Users\tomje\OneDrive\Documents\Language-App-master\Polish" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6\Images" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6\Audio" />
       <recent name="C:\Users\tomje\PycharmProjects\Unit_6" />
@@ -599,7 +593,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49799198" visible="true" weight="0.13672496" />
       <window_info id="Structure" order="1" sideWeight="0.502008" side_tool="true" weight="0.18757921" />
@@ -614,7 +607,7 @@
       <window_info anchor="bottom" id="TODO" order="7" sideWeight="0.49523053" weight="0.22064057" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5111288" side_tool="true" weight="0.29537368" />
       <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.49682036" weight="0.32740214" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4864865" weight="0.32562277" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4864865" visible="true" weight="0.32562277" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -707,7 +700,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/bootsession_2018_8_17_22_6_15.xml" />
     <entry file="file://$PROJECT_DIR$/Italian Dictionary" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/genericpath.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/ntpath.py" />
@@ -815,6 +807,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Copy and Paste Code.py" />
     <entry file="file://$PROJECT_DIR$/Main.py" />
+    <entry file="file://$PROJECT_DIR$/Italian/Food and Drink">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/tkinter/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="28900">
+          <caret line="1703" selection-start-line="1703" selection-end-line="1703" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/traceback.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8364">
@@ -848,23 +854,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Italian/Food and Drink">
+    <entry file="file://$PROJECT_DIR$/Prototype.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/tkinter/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="1703" lean-forward="true" selection-start-line="1703" selection-end-line="1703" />
-        </state>
+        <state relative-caret-position="-102" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/LanguageApp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
+        <state relative-caret-position="3758">
           <caret line="296" column="28" selection-start-line="296" selection-start-column="28" selection-end-line="296" selection-end-column="28" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
