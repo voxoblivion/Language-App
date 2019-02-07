@@ -23,7 +23,7 @@ class SampleApp(tk.Tk):
         self.score = 0
         self.user_level = ""
         self.name = ""
-        self.title = ""
+        self.title = "Teacher"
         self.correct = 0
         self.user_ans = ""
         self.language = tk.StringVar()
@@ -78,7 +78,7 @@ class SampleApp(tk.Tk):
         else:
             self.index += 1
             if eng_text is not None:
-                eng_text.configure(text=self.words[str(self.index)][1])
+                eng_text.configure(text="English Word")
             if foreign_text is not None:
                 foreign_text.configure(text=self.words[str(self.index)][0])
             if image is not None:
@@ -107,32 +107,13 @@ class SampleApp(tk.Tk):
                 label.config(text="Please enter the word in English associated with this image")
             return True
 
-    def check_login(self, user_username, user_password, label):
-        conn = sqlite3.connect("test.db")
-        c = conn.cursor()
-        usernames_passwords = {}
-        for i in c.execute("SELECT * FROM users"):
-            user_id = i[0]
-            first_name = i[1]
-            last_name = i[2]
-            username = str(last_name[0] + first_name).lower()
-            password = (last_name + str(user_id)).lower()
-            usernames_passwords[username] = password
-        conn.close()
-        if user_username in usernames_passwords.keys() and user_password in usernames_passwords.values():
-            user_username = user_username.split(user_username[0], 1)[1]
-            conn = sqlite3.connect("test.db")
-            name = (user_username.title(),)
-            c = conn.cursor()
-            c.execute("SELECT permission_level FROM users WHERE first_name =?", name)
-            self.user_level = c.fetchone()[0]
-            c.execute("SELECT user_type FROM users WHERE first_name =?", name)
-            self.title = c.fetchone()[0]
-            c.execute("SELECT user_id FROM users WHERE first_name =?", name)
-            self.user_id = c.fetchone()[0]
-            self.switch_frame(LangPage)
+    def check_login(self, permission):
+        if permission == "Teacher":
+            self.title = permission
         else:
-            label.config(text="Incorrect username and password combination please try again")
+            self.user_level = "USER"
+            self.title = "Student"
+        self.switch_frame(LangPage)
 
     def calc_score(self, start_time, correct_ans=None):  # The lower the score the better
         if self.index == 1:
@@ -152,10 +133,7 @@ class SampleApp(tk.Tk):
 
     def set_ans(self, ans, start_time, eng_text=None):
         self.user_ans = ans
-        if self.check_entry(ans) is True:
-            correct_ans = True
-        else:
-            correct_ans = False
+        correct_ans = True
         self.calc_score(start_time, correct_ans)
         self.next_slide(eng_text=eng_text)
 
@@ -165,47 +143,17 @@ class SampleApp(tk.Tk):
         self.switch_frame(ActivitySelector)
 
     def add_user(self, first_name="", last_name="", user_level="", tasks=None, tasks_completed=None):
-        if len(first_name) != 0 and len(last_name) != 0 and len(user_level) != 0:
-            conn = sqlite3.connect("test.db")
-            c = conn.cursor()
-            c.execute("SELECT user_id FROM users")
-            user_no = len(c.fetchall()) + 1
-            user_perms = "USER"
-            if user_level == "Teacher":
-                user_perms = "ADMIN"
-            values = (user_no, first_name, last_name, user_level, user_perms, tasks, tasks_completed)
-            c.execute("INSERT INTO users VALUES (?,?,?,?,?,?,?)", values)
-            conn.commit()
-            conn.close()
-            self.switch_frame(MainPage)
-        else:
-            self._frame.destroy()
-            self._frame = tk.Frame()
-            label = tk.Label(self._frame, text="Please make sure you enter all details")
-            button = tk.Button(self._frame, text="Ok", command=lambda: self.switch_frame(AddUser))
-            label.grid()
-            button.grid()
-            self._frame.grid()
+        self.switch_frame(MainPage)
 
-    def select_assignment(self, user_id):
+    def select_assignment(self):
         self._frame.destroy()
         self._frame = tk.Frame()
         scrollbar = tk.Scrollbar(self._frame)
         label = tk.Label(self._frame, text="Please click the subject for the tasks you want to assign the users\n"
                                     "The subject highlighted are the subject selected")
         my_list = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, width=30, height=3)
-        subjects = glob.glob("Italian/*")
-        subject_list = {}
-        subject_index = 0
-        for subject in subjects:
-            subject_name = ""
-            for i in range(8, len(subject)):
-                subject_name += subject[i]
-            my_list.insert(tk.END, subject_name)
-            subject_list[subject_index] = subject_name
-            subject_index += 1
         next_button = tk.Button(self._frame, text="Next",
-                                  command=lambda: self.select_task(user_id, subject_list, my_list.curselection()))
+                                  command=lambda: self.switch_frame(MainPage))
         label.grid()
         my_list.grid()
         next_button.grid()
@@ -216,57 +164,33 @@ class SampleApp(tk.Tk):
         self._frame = tk.Frame()
         label = tk.Label(self._frame, text="Please select the tasks for want for the user to do in the chosen subject")
         list_box_2 = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, height=3, width=30)
-        tasks = ["Task 1", "Task 2", "Task 3"]
-        [list_box_2.insert(tk.END, task) for task in tasks]
         assign_button = tk.Button(self._frame, text="Assign task",
-                        command=lambda: self.assign_tasks(user_id, subject_list, task_selection, list_box_2.curselection()))
+                        command=lambda: self.assign_tasks())
         label.grid()
         list_box_2.grid()
         assign_button.grid()
         self._frame.grid()
 
-    def get_users(self, users_selected, users, use):
-        user_ids = [users[i][0] for i in users_selected]
+    def get_users(self, use):
         if use == "Assign Tasks":
-            self.select_assignment(user_ids)
+            self.select_assignment()
         elif use == "View Tasks":
-            self.view_tasks(user_ids)
+            self.view_tasks()
 
-    def assign_tasks(self, user_id, subject_list, task_selection, tasks):
-        conn = sqlite3.connect("test.db")
-        c = conn.cursor()
-        task_no = ["Task " + str(i + 1) for i in tasks]
-        task_list = [subject_list[tasks] + " " + task for task in task_no for tasks in task_selection]
-        for users in user_id:
-            items = (str(task_list), users, )
-            c.execute("UPDATE users SET tasks = ? WHERE user_id = ?", items)
-        conn.commit()
-        conn.close()
+    def assign_tasks(self):
         self.switch_frame(MainPage)
 
-    def view_tasks(self, user_id):
+    def view_tasks(self):
         self._frame.destroy()
         self._frame = tk.Frame()
-        conn = sqlite3.connect("test.db")
-        c = conn.cursor()
-        user_id = tuple(user_id)
-        c.execute("SELECT tasks_completed FROM users WHERE user_id = ?", user_id)
-        tasks = c.fetchall()
         scrollbar = tk.Scrollbar(self._frame)
-        label = tk.Label(self._frame, text="Here are the tasks that\nthe user with the ID " + str(user_id[0]) + " has completed")
+        label = tk.Label(self._frame, text="Here are the tasks that\nthe user with the ID (insert later) has completed")
         my_list = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, width=30, height=3)
         next_button = tk.Button(self._frame, text="Return", command=lambda: self.switch_frame(MainPage))
-        if tasks[0][0] is not None:
-            tasks = tasks[0][0].split(", ")
-            [my_list.insert(tk.END, str(x)) for x in tasks]
-            my_list.grid(column=0, columnspan=1, row=2)
-            scrollbar.config(command=my_list.yview)
-            scrollbar.grid(column=1, row=2)
-            next_button.grid()
-        else:
-            label2 = tk.Label(self._frame, text="No tasks completed")
-            label2.grid(row=2, column=0, columnspan=2)
-            next_button.grid(column=0, columnspan=2)
+        my_list.grid(column=0, columnspan=1, row=2)
+        scrollbar.config(command=my_list.yview)
+        scrollbar.grid(column=1, row=2)
+        next_button.grid()
         label.grid(row=0, columnspan=2, rowspan=2, column=0)
         self._frame.grid()
 
@@ -293,16 +217,15 @@ class LoginPage(tk.Frame):
         password = tk.StringVar()
         password_entry = tk.Entry(self, textvariable=password)
         password_label = tk.Label(self, text="Password:")
-        username.set("sjohn")
-        password.set("smith1")
-        button = tk.Button(self, text="Login", command=lambda: master.check_login(user_username=username.get(),
-                                                          user_password=password.get(), label=label))
+        button_1 = tk.Button(self, text="Teacher Login", command=lambda: master.check_login("Teacher"))
+        button_2 = tk.Button(self, text="Student Login", command=lambda: master.check_login("USER"))
         label.grid(row=0, column=0, columnspan=8)
         username_label.grid(column=4, row=2)
         username_entry.grid(column=5, row=2)
         password_entry.grid(column=5, row=3)
         password_label.grid(column=4, row=3)
-        button.grid(row=4, column=0, columnspan=8, pady=5)
+        button_1.grid(row=4, column=0, columnspan=8, pady=5)
+        button_2.grid(row=5, column=0, columnspan=8, pady=5)
 
 
 class LangPage(tk.Frame):
@@ -339,9 +262,8 @@ class MainPage(tk.Frame):
         start_label.grid()
         page_1_button.grid()
         page_4_button.grid(pady=1, padx=5)
-        if master.user_level == "ADMIN":
-            page_5_button.grid()
         if master.title == "Teacher":
+            page_5_button.grid()
             page_9_button.grid()
             page_6_button.grid()
         if master.user_level == "USER":
@@ -369,7 +291,7 @@ class SubjectSelection(tk.Frame):
 class ActivitySelector(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        master.image = tk.PhotoImage(file=master.words[str(master.index)][3])
+        master.image = tk.PhotoImage(file="Images/placeholder.png")
         label = tk.Label(self, text="Please select an activity")
         ac1 = tk.Button(self, text="Activity 1", command=lambda: master.switch_frame(Activity1))
         ac2 = tk.Button(self, text="Activity 2", command=lambda: master.switch_frame(Activity2))
@@ -385,8 +307,8 @@ class Activity1(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         master.activity = "Activity 1"
-        ac1_native_word = tk.Label(self, text=master.words[str(master.index)][0])
-        ac1_eng_word = tk.Label(self, text=master.words[str(master.index)][1])
+        ac1_native_word = tk.Label(self, text="Native Word")
+        ac1_eng_word = tk.Label(self, text="English Word")
         ac1_image_2 = tk.PhotoImage(file='Images/Speaker.png')
         ac1_speaker = tk.Button(self, image=ac1_image_2,
                                 command=lambda: playsound.playsound(master.words[str(master.index)][2]))
@@ -398,9 +320,7 @@ class Activity1(tk.Frame):
         ac1_mic = tk.Button(self, image=ac1_image_3, command=record_audio_and_play)
         ac1_mic.image = ac1_image_3
         ac1_start_button = tk.Button(self, text="Next Slide",
-                                     command=lambda: master.next_slide(eng_text=ac1_eng_word,
-                                                                       percentage=percentage_label,
-                                                                       foreign_text=ac1_native_word, image=ac1_image))
+                                     command=lambda: master.next_slide())
         return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         percentage_label = tk.Label(self, text=master.percentage_complete)
         ac1_native_word.grid(row=0, column=2)
@@ -420,16 +340,14 @@ class Activity2(tk.Frame):
         ac2_intro = tk.Label(self, text="Please enter the word in English associated\n"
                                         "with this image then press enter")
         ac2_label_2 = tk.Label(self, image=master.image)
-        ac2_native_word = tk.Label(self, text=master.words[str(master.index)][0])
+        ac2_native_word = tk.Label(self, text="Native Word")
         ac2_image_2 = tk.PhotoImage(file='Images/Speaker.png')
-        ac2_speaker = tk.Button(self, image=ac2_image_2,
-                                command=lambda: playsound.playsound(master.words[str(master.index)][2]))
+        ac2_speaker = tk.Button(self, image=ac2_image_2)
         ac2_speaker.image = ac2_image_2
         ac2_user = tk.StringVar()
         ac2_entry_1 = tk.Entry(self, textvariable=ac2_user)
         ac2_entry_1.bind("<Return>",
-                         lambda x: master.check_entry(ac2_user.get(), label=ac2_intro, native_word=ac2_native_word,
-                                                      image=ac2_label_2, entry_widget=ac2_entry_1, percentage=percentage_label))
+                         lambda x: master.next_slide())
         return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
         percentage_label = tk.Label(self, text=master.percentage_complete)
         ac2_intro.grid(row=0, rowspan=2)
@@ -451,7 +369,7 @@ class Activity3(tk.Frame):
         self.image_dict = {}
         self.start_time = time.strftime("%H:%M:%S", time.localtime()).split(":")
         for i in range(1, len(master.words.keys()) + 1):
-            self.image_dirs.append(tk.PhotoImage(file=master.words[str(i)][3]).subsample(3))
+            self.image_dirs.append(tk.PhotoImage(file="Images/placeholder.png").subsample(3))
             self.button_list.append(tk.Button(self, image=self.image_dirs[i - 1]))
             self.image_dict[self.button_list[i - 1]] = master.words[str(i)][1]
             current_button = self.button_list[i-1]
@@ -523,18 +441,7 @@ class AssignTask(tk.Frame):
         label = tk.Label(self, text="Please click the users you want to assign the tasks to\n"
                                     "The users highlighted are the users selected")
         my_list = tk.Listbox(self, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, width=30, height=3)
-        users = {}
-        conn = sqlite3.connect("test.db")
-        c = conn.cursor()
-        c.execute("SELECT user_id, first_name, last_name FROM users WHERE user_type = 'Student'")
-        list_index = 0
-        for i in c.fetchall():
-            users[list_index] = (i[0], i[1], i[2])
-            list_index += 1
-            my_list.insert(tk.END, "UserID: %d Fullname: %s" % (i[0], str(i[1]+" "+i[2])))
-        conn.close()
-        next_button = tk.Button(self, text="Next", command=lambda: master.get_users(my_list.curselection(), users,
-                                                                                    use="Assign Tasks"))
+        next_button = tk.Button(self, text="Next", command=lambda: master.get_users(use="Assign Tasks"))
         label.grid(row=0)
         my_list.grid(row=1, column=0, columnspan=3)
         scrollbar.config(command=my_list.yview)
@@ -545,26 +452,13 @@ class AssignTask(tk.Frame):
 class ViewTasks(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        conn = sqlite3.connect("test.db")
-        c = conn.cursor()
-        c.execute("SELECT first_name, last_name, tasks FROM users WHERE user_id = '%s'" % master.user_id)
-        first_name, last_name, tasks = c.fetchall()[0]
-        full_name = "%s %s" % (first_name, last_name)
-        label = tk.Label(self, text="Currently assigned tasks for %s:" % full_name)
+        label = tk.Label(self, text="Currently assigned tasks for (insert later)")
         list_box = tk.Listbox(self, height=5, selectmode=tk.MULTIPLE)
-        tasks = tasks.split("'")
-        new_list = []
-        for i in tasks:
-            if str.isalpha(i[0]) is True:
-                new_list.append(i)
-        [list_box.insert(tk.END, data) for data in new_list]
         return_button = tk.Button(self, text="Return to home page", command=lambda: master.switch_frame(MainPage))
         activity_button = tk.Button(self, text="Go to subject selector",
                                     command=lambda: master.switch_frame(SubjectSelection))
         complete_button = tk.Button(self, text="Mark as completed",
-                command=lambda: master.task_complete([list_box.get(selection) for selection in list_box.curselection()],
-                new_list))
-        conn.close()
+                command=lambda: master.switch_frame(MainPage))
         label.grid(row=0)
         list_box.grid(row=1)
         activity_button.grid(row=2)
@@ -579,18 +473,7 @@ class ViewStudentsTasks(tk.Frame):
         label = tk.Label(self, text="Please click the users you want to view their tasks completed\n"
                                     "the user highlighted is the user selected")
         my_list = tk.Listbox(self, selectmode=tk.BROWSE, yscrollcommand=scrollbar.set, width=30, height=3)
-        users = {}
-        conn = sqlite3.connect("test.db")
-        c = conn.cursor()
-        c.execute("SELECT user_id, first_name, last_name FROM users WHERE user_type = 'Student'")
-        list_index = 0
-        for i in c.fetchall():
-            users[list_index] = (i[0], i[1], i[2])
-            list_index += 1
-            my_list.insert(tk.END, "UserID: %d Fullname: %s" % (i[0], str(i[1]+" "+i[2])))
-        conn.close()
-        next_button = tk.Button(self, text="Next", command=lambda: master.get_users(my_list.curselection(), users,
-                                                                                    use="View Tasks"))
+        next_button = tk.Button(self, text="Next", command=lambda: master.get_users(use="View Tasks"))
         label.grid(row=0)
         my_list.grid(row=1, column=0, columnspan=3)
         scrollbar.config(command=my_list.yview)

@@ -1,5 +1,6 @@
 from pyaudio import PyAudio, paInt16
 import wave
+import pygame
 
 
 def get_language():
@@ -88,6 +89,12 @@ def play_sound(sound):
 def record_audio_and_play():
     sound = record_audio()
     play_sound(sound)
+
+
+def play_mp3(file):
+    pygame.mixer.init()
+    pygame.mixer.music.load(file)
+    pygame.mixer.music.play()
 
 
 

@@ -1,11 +1,11 @@
 import json
 import random
-from libary import record_audio_and_play
+from libary import record_audio_and_play, play_mp3
 import tkinter as tk
-import playsound
 import sqlite3
 import glob
 import time
+from tkinter.font import Font
 
 # TODO change menu messages to native language
 # TODO once a task has been completed automatically remove from task (could be after feedback)
@@ -32,6 +32,8 @@ class SampleApp(tk.Tk):
         self.percentage_complete = 10
         self.subject = ""
         self.activity = ""
+        self.active_button_style = dict(activebackground="Blue", activeforeground="White")
+        self.english_word_style = Font(slant="italic")
 
     def switch_frame(self, frame_class, lang=None, index=1):
         """Destroys current frame and replaces it with a new one."""
@@ -52,14 +54,16 @@ class SampleApp(tk.Tk):
             if self.activity == "Activity 3":
                 out_of_10 = tk.Label(temp_frame, text="You got " + str(self.correct) + " out of 10 right")
                 score = tk.Label(temp_frame, text="Your score is: " + str(self.score))
-                button = tk.Button(temp_frame, text="Return to start page", command=lambda: self.switch_frame(MainPage))
+                button = tk.Button(temp_frame, text="Return to start page", command=lambda: self.switch_frame(MainPage),
+                                   **self.active_button_style)
                 out_of_10.grid()
                 score.grid()
                 button.grid()
             else:
                 label = tk.Label(temp_frame, text="Thank you for completing activity\n "
                                                   "please press the continue button to return to the main menu")
-                button = tk.Button(temp_frame, text="Continue", command=lambda: self.switch_frame(MainPage))
+                button = tk.Button(temp_frame, text="Continue", command=lambda: self.switch_frame(MainPage),
+                                   **self.active_button_style)
                 label.grid()
                 button.grid()
             conn = sqlite3.connect("test.db")
@@ -182,7 +186,8 @@ class SampleApp(tk.Tk):
             self._frame.destroy()
             self._frame = tk.Frame()
             label = tk.Label(self._frame, text="Please make sure you enter all details")
-            button = tk.Button(self._frame, text="Ok", command=lambda: self.switch_frame(AddUser))
+            button = tk.Button(self._frame, text="Ok", command=lambda: self.switch_frame(AddUser),
+                               **self.active_button_style)
             label.grid()
             button.grid()
             self._frame.grid()
@@ -204,7 +209,7 @@ class SampleApp(tk.Tk):
             my_list.insert(tk.END, subject_name)
             subject_list[subject_index] = subject_name
             subject_index += 1
-        next_button = tk.Button(self._frame, text="Next",
+        next_button = tk.Button(self._frame, text="Next", **self.active_button_style,
                                   command=lambda: self.select_task(user_id, subject_list, my_list.curselection()))
         label.grid()
         my_list.grid()
@@ -218,7 +223,7 @@ class SampleApp(tk.Tk):
         list_box_2 = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, height=3, width=30)
         tasks = ["Task 1", "Task 2", "Task 3"]
         [list_box_2.insert(tk.END, task) for task in tasks]
-        assign_button = tk.Button(self._frame, text="Assign task",
+        assign_button = tk.Button(self._frame, text="Assign task", **self.active_button_style,
                         command=lambda: self.assign_tasks(user_id, subject_list, task_selection, list_box_2.curselection()))
         label.grid()
         list_box_2.grid()
@@ -226,11 +231,14 @@ class SampleApp(tk.Tk):
         self._frame.grid()
 
     def get_users(self, users_selected, users, use):
-        user_ids = [users[i][0] for i in users_selected]
-        if use == "Assign Tasks":
-            self.select_assignment(user_ids)
-        elif use == "View Tasks":
-            self.view_tasks(user_ids)
+        if len(users_selected) > 0:
+            user_ids = [users[i][0] for i in users_selected]
+            if use == "Assign Tasks":
+                self.select_assignment(user_ids)
+            elif use == "View Tasks":
+                self.view_tasks(user_ids)
+        else:
+            self.switch_frame(MainPage)
 
     def assign_tasks(self, user_id, subject_list, task_selection, tasks):
         conn = sqlite3.connect("test.db")
@@ -244,31 +252,35 @@ class SampleApp(tk.Tk):
         conn.close()
         self.switch_frame(MainPage)
 
-    def view_tasks(self, user_id):
-        self._frame.destroy()
-        self._frame = tk.Frame()
-        conn = sqlite3.connect("test.db")
-        c = conn.cursor()
-        user_id = tuple(user_id)
-        c.execute("SELECT tasks_completed FROM users WHERE user_id = ?", user_id)
-        tasks = c.fetchall()
-        scrollbar = tk.Scrollbar(self._frame)
-        label = tk.Label(self._frame, text="Here are the tasks that\nthe user with the ID " + str(user_id[0]) + " has completed")
-        my_list = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, width=30, height=3)
-        next_button = tk.Button(self._frame, text="Return", command=lambda: self.switch_frame(MainPage))
-        if tasks[0][0] is not None:
-            tasks = tasks[0][0].split(", ")
-            [my_list.insert(tk.END, str(x)) for x in tasks]
-            my_list.grid(column=0, columnspan=1, row=2)
-            scrollbar.config(command=my_list.yview)
-            scrollbar.grid(column=1, row=2)
-            next_button.grid()
+    def view_tasks(self, user_id=None):
+        if user_id is not None:
+            self._frame.destroy()
+            self._frame = tk.Frame()
+            conn = sqlite3.connect("test.db")
+            c = conn.cursor()
+            user_id = tuple(user_id)
+            c.execute("SELECT tasks_completed FROM users WHERE user_id = ?", user_id)
+            tasks = c.fetchall()
+            scrollbar = tk.Scrollbar(self._frame)
+            label = tk.Label(self._frame, text="Here are the tasks that\nthe user with the ID " + str(user_id[0]) + " has completed")
+            my_list = tk.Listbox(self._frame, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, width=30, height=3)
+            next_button = tk.Button(self._frame, text="Return", command=lambda: self.switch_frame(MainPage),
+                                    **self.active_button_style)
+            if tasks[0][0] is not None:
+                tasks = tasks[0][0].split(", ")
+                [my_list.insert(tk.END, str(x)) for x in tasks]
+                my_list.grid(column=0, columnspan=1, row=2)
+                scrollbar.config(command=my_list.yview)
+                scrollbar.grid(column=1, row=2)
+                next_button.grid()
+            else:
+                label2 = tk.Label(self._frame, text="No tasks completed")
+                label2.grid(row=2, column=0, columnspan=2)
+                next_button.grid(column=0, columnspan=2)
+            label.grid(row=0, columnspan=2, rowspan=2, column=0)
+            self._frame.grid()
         else:
-            label2 = tk.Label(self._frame, text="No tasks completed")
-            label2.grid(row=2, column=0, columnspan=2)
-            next_button.grid(column=0, columnspan=2)
-        label.grid(row=0, columnspan=2, rowspan=2, column=0)
-        self._frame.grid()
+            self.switch_frame(MainPage)
 
     def task_complete(self, tasks, task_list):
         conn = sqlite3.connect("test.db")
@@ -296,7 +308,7 @@ class LoginPage(tk.Frame):
         username.set("sjohn")
         password.set("smith1")
         button = tk.Button(self, text="Login", command=lambda: master.check_login(user_username=username.get(),
-                                                          user_password=password.get(), label=label))
+                                user_password=password.get(), label=label))
         label.grid(row=0, column=0, columnspan=8)
         username_label.grid(column=4, row=2)
         username_entry.grid(column=5, row=2)
@@ -327,15 +339,15 @@ class MainPage(tk.Frame):
         master.correct = 0
         start_label = tk.Label(self, text="Main Menu - %s" % master.title)
         page_1_button = tk.Button(self, text="Subject Selector",
-                                  command=lambda: master.switch_frame(SubjectSelection))
-        page_4_button = tk.Button(self, text="Re-select native language",
+                                  command=lambda: master.switch_frame(SubjectSelection), **master.active_button_style)
+        page_4_button = tk.Button(self, text="Re-select native language", **master.active_button_style,
                                   command=lambda: master.switch_frame(LangPage))
-        page_5_button = tk.Button(self, text="Add new user", command=lambda: master.switch_frame(AddUser))
-        page_6_button = tk.Button(self, text="Assign tasks", command=lambda: master.switch_frame(AssignTask))
-        page_7_button = tk.Button(self, text="View assigned tasks", command=lambda: master.switch_frame(ViewTasks))
-        page_8_button = tk.Button(self, text="Logout", command=lambda: master.switch_frame(LoginPage))
-        page_9_button = tk.Button(self, text="View Tasks Completed", command=lambda: master.switch_frame(ViewStudentsTasks))
-        exit_button = tk.Button(self, text="Quit", command=self.quit)
+        page_5_button = tk.Button(self, text="Add new user", command=lambda: master.switch_frame(AddUser), **master.active_button_style)
+        page_6_button = tk.Button(self, text="Assign tasks", command=lambda: master.switch_frame(AssignTask), **master.active_button_style)
+        page_7_button = tk.Button(self, text="View assigned tasks", command=lambda: master.switch_frame(ViewTasks), **master.active_button_style)
+        page_8_button = tk.Button(self, text="Logout", command=lambda: master.switch_frame(LoginPage), **master.active_button_style)
+        page_9_button = tk.Button(self, text="View Tasks Completed", command=lambda: master.switch_frame(ViewStudentsTasks), **master.active_button_style)
+        exit_button = tk.Button(self, text="Quit", command=self.quit, **master.active_button_style)
         start_label.grid()
         page_1_button.grid()
         page_4_button.grid(pady=1, padx=5)
@@ -360,7 +372,8 @@ class SubjectSelection(tk.Frame):
             subject_name = ""
             for i in range(8, len(subject)):
                 subject_name += subject[i]
-            button = tk.Button(self, text=subject_name, command=lambda: master.generate_dict(button.cget('text')))
+            button = tk.Button(self, text=subject_name, command=lambda: master.generate_dict(button.cget('text')),
+                               **master.active_button_style)
             subjects_buttons.append(button)
         for button in subjects_buttons:
             button.grid(pady=2)
@@ -371,9 +384,9 @@ class ActivitySelector(tk.Frame):
         tk.Frame.__init__(self, master)
         master.image = tk.PhotoImage(file=master.words[str(master.index)][3])
         label = tk.Label(self, text="Please select an activity")
-        ac1 = tk.Button(self, text="Activity 1", command=lambda: master.switch_frame(Activity1))
-        ac2 = tk.Button(self, text="Activity 2", command=lambda: master.switch_frame(Activity2))
-        ac3 = tk.Button(self, text="Activity 3", command=lambda: master.switch_frame(Activity3))
+        ac1 = tk.Button(self, text="Activity 1", command=lambda: master.switch_frame(Activity1), **master.active_button_style)
+        ac2 = tk.Button(self, text="Activity 2", command=lambda: master.switch_frame(Activity2), **master.active_button_style)
+        ac3 = tk.Button(self, text="Activity 3", command=lambda: master.switch_frame(Activity3), **master.active_button_style)
         master.percentage_complete = str(int((master.index/len(master.words)) * 100))+'%'
         label.grid()
         ac1.grid()
@@ -386,22 +399,23 @@ class Activity1(tk.Frame):
         tk.Frame.__init__(self, master)
         master.activity = "Activity 1"
         ac1_native_word = tk.Label(self, text=master.words[str(master.index)][0])
-        ac1_eng_word = tk.Label(self, text=master.words[str(master.index)][1])
+        ac1_eng_word = tk.Label(self, text=master.words[str(master.index)][1], font=master.english_word_style)
         ac1_image_2 = tk.PhotoImage(file='Images/Speaker.png')
-        ac1_speaker = tk.Button(self, image=ac1_image_2,
-                                command=lambda: playsound.playsound(master.words[str(master.index)][2]))
+        ac1_speaker = tk.Button(self, image=ac1_image_2, **master.active_button_style,
+                                command=lambda: play_mp3(master.words[str(master.index)][2]))
         ac1_speaker.image = ac1_image_2
         ac1_image_1 = master.image
         ac1_image = tk.Label(self, image=ac1_image_1)
         ac1_image_1.image = ac1_image_1
         ac1_image_3 = tk.PhotoImage(file='Images/mic.png')
-        ac1_mic = tk.Button(self, image=ac1_image_3, command=record_audio_and_play)
+        ac1_mic = tk.Button(self, image=ac1_image_3, command=record_audio_and_play, **master.active_button_style)
         ac1_mic.image = ac1_image_3
-        ac1_start_button = tk.Button(self, text="Next Slide",
+        ac1_start_button = tk.Button(self, text="Next Slide", **master.active_button_style,
                                      command=lambda: master.next_slide(eng_text=ac1_eng_word,
                                                                        percentage=percentage_label,
                                                                        foreign_text=ac1_native_word, image=ac1_image))
-        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
+        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage),
+                                  **master.active_button_style)
         percentage_label = tk.Label(self, text=master.percentage_complete)
         ac1_native_word.grid(row=0, column=2)
         ac1_eng_word.grid(row=1, column=2)
@@ -422,15 +436,16 @@ class Activity2(tk.Frame):
         ac2_label_2 = tk.Label(self, image=master.image)
         ac2_native_word = tk.Label(self, text=master.words[str(master.index)][0])
         ac2_image_2 = tk.PhotoImage(file='Images/Speaker.png')
-        ac2_speaker = tk.Button(self, image=ac2_image_2,
-                                command=lambda: playsound.playsound(master.words[str(master.index)][2]))
+        ac2_speaker = tk.Button(self, image=ac2_image_2, **master.active_button_style,
+                                command=lambda: play_mp3(master.words[str(master.index)][2]))
         ac2_speaker.image = ac2_image_2
         ac2_user = tk.StringVar()
         ac2_entry_1 = tk.Entry(self, textvariable=ac2_user)
         ac2_entry_1.bind("<Return>",
                          lambda x: master.check_entry(ac2_user.get(), label=ac2_intro, native_word=ac2_native_word,
                                                       image=ac2_label_2, entry_widget=ac2_entry_1, percentage=percentage_label))
-        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
+        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage),
+                                  **master.active_button_style)
         percentage_label = tk.Label(self, text=master.percentage_complete)
         ac2_intro.grid(row=0, rowspan=2)
         ac2_speaker.grid(row=8)
@@ -452,7 +467,7 @@ class Activity3(tk.Frame):
         self.start_time = time.strftime("%H:%M:%S", time.localtime()).split(":")
         for i in range(1, len(master.words.keys()) + 1):
             self.image_dirs.append(tk.PhotoImage(file=master.words[str(i)][3]).subsample(3))
-            self.button_list.append(tk.Button(self, image=self.image_dirs[i - 1]))
+            self.button_list.append(tk.Button(self, image=self.image_dirs[i - 1], **master.active_button_style))
             self.image_dict[self.button_list[i - 1]] = master.words[str(i)][1]
             current_button = self.button_list[i-1]
             self.button_list[i - 1].config(command=lambda ans=current_button:
@@ -470,9 +485,10 @@ class Activity3(tk.Frame):
         ac3_label = tk.Label(self, text="Once you clicked the start button the game will begin please click the image "
                                         "corresponding to the word that appears.\n The game is time based so the quicker"
                                         " you complete the game the better score you will achieve, the lower the better")
-        ac3_start_button = tk.Button(self, text="Start Game",
+        ac3_start_button = tk.Button(self, text="Start Game", **master.active_button_style,
                                      command=lambda: master.next_slide(eng_text=ac3_label, unec_frame=ac3_start_button))
-        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage))
+        return_button = tk.Button(self, text="Return to start page", command=lambda: master.switch_frame(MainPage),
+                                  **master.active_button_style)
         ac3_label.grid(row=3, columnspan=6, column=0, rowspan=2)
         ac3_start_button.grid(row=5, columnspan=6, column=0)
         return_button.grid(row=6, columnspan=6, column=0)
@@ -491,9 +507,10 @@ class AddUser(tk.Frame):
         position_label = tk.Label(self, text="Position")
         position = tk.StringVar()
         position_entry = tk.OptionMenu(self, position, "Student", "Teacher", command=lambda x: position.get())
-        add_button = tk.Button(self, text="Add User", command=lambda: master.add_user(first_name.get(), last_name.get(),
-                                                                                      position.get()))
-        return_button = tk.Button(self, text="Return to MainPage", command=lambda: master.switch_frame(MainPage))
+        add_button = tk.Button(self, text="Add User", command=lambda: master.add_user(first_name.get().title(), last_name.get().title(),
+                                                    position.get()), **master.active_button_style)
+        return_button = tk.Button(self, text="Return to MainPage", command=lambda: master.switch_frame(MainPage),
+                                  **master.active_button_style)
         intro.grid(row=0, column=0, columnspan=2)
         first_name_label.grid(row=1, column=0)
         first_name_entry.grid(row=1, column=1)
@@ -534,7 +551,7 @@ class AssignTask(tk.Frame):
             my_list.insert(tk.END, "UserID: %d Fullname: %s" % (i[0], str(i[1]+" "+i[2])))
         conn.close()
         next_button = tk.Button(self, text="Next", command=lambda: master.get_users(my_list.curselection(), users,
-                                                                                    use="Assign Tasks"))
+                                                    use="Assign Tasks"), **master.active_button_style)
         label.grid(row=0)
         my_list.grid(row=1, column=0, columnspan=3)
         scrollbar.config(command=my_list.yview)
@@ -558,10 +575,11 @@ class ViewTasks(tk.Frame):
             if str.isalpha(i[0]) is True:
                 new_list.append(i)
         [list_box.insert(tk.END, data) for data in new_list]
-        return_button = tk.Button(self, text="Return to home page", command=lambda: master.switch_frame(MainPage))
-        activity_button = tk.Button(self, text="Go to subject selector",
+        return_button = tk.Button(self, text="Return to home page", command=lambda: master.switch_frame(MainPage),
+                                                                                    **master.active_button_style)
+        activity_button = tk.Button(self, text="Go to subject selector", **master.active_button_style,
                                     command=lambda: master.switch_frame(SubjectSelection))
-        complete_button = tk.Button(self, text="Mark as completed",
+        complete_button = tk.Button(self, text="Mark as completed", **master.active_button_style,
                 command=lambda: master.task_complete([list_box.get(selection) for selection in list_box.curselection()],
                 new_list))
         conn.close()
@@ -590,7 +608,7 @@ class ViewStudentsTasks(tk.Frame):
             my_list.insert(tk.END, "UserID: %d Fullname: %s" % (i[0], str(i[1]+" "+i[2])))
         conn.close()
         next_button = tk.Button(self, text="Next", command=lambda: master.get_users(my_list.curselection(), users,
-                                                                                    use="View Tasks"))
+                                                use="View Tasks"), **master.active_button_style)
         label.grid(row=0)
         my_list.grid(row=1, column=0, columnspan=3)
         scrollbar.config(command=my_list.yview)
